@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VINaris Admin Panel - Working</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg: #0a0a0a;
+            --panel: #1a1a1a;
+            --panel2: #2a2a2a;
+            --border: #333;
+            --text: #ffffff;
+            --muted: #999;
+            --primary: #e60000;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --danger: #ef4444;
+            --radius: 12px;
+            --shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .admin-container {
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: var(--panel);
+            border-right: 1px solid var(--border);
+            padding: 20px 0;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
+
+        .sidebar-header h2 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .sidebar-header p {
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin: 5px 0;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: var(--text);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-link:hover {
+            background: var(--panel2);
+            border-left-color: var(--primary);
+        }
+
+        .nav-link.active {
+            background: var(--panel2);
+            border-left-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .nav-link i {
+            margin-right: 10px;
+            width: 20px;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .header {
+            background: var(--panel);
+            border-bottom: 1px solid var(--border);
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            color: var(--text);
+            font-size: 1.8rem;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #c21827;
+        }
+
+        .btn-secondary {
+            background: var(--panel2);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border);
+        }
+
+        .content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 25px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .stat-card h3 {
+            color: var(--muted);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-card .number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .stat-card .label {
+            color: var(--text);
+            font-size: 1rem;
+        }
+
+        .content-section {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .content-section h2 {
+            color: var(--text);
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .table th,
+        .table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .table th {
+            background: var(--panel2);
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .table td {
+            color: var(--muted);
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-pending {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--warning);
+        }
+
+        .status-completed {
+            background: rgba(34, 197, 94, 0.2);
+            color: var(--success);
+        }
+
+        .status-processing {
+            background: rgba(59, 130, 246, 0.2);
+            color: var(--info);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--muted);
+        }
+
+        .error {
+            color: var(--danger);
+            background: rgba(239, 68, 68, 0.1);
+            padding: 15px;
+            border-radius: var(--radius);
+            margin: 15px 0;
+        }
+
+        .success {
+            color: var(--success);
+            background: rgba(34, 197, 94, 0.1);
+            padding: 15px;
+            border-radius: var(--radius);
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <script src="../js/xampp-api-utils.js"></script>
+    
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>VINaris Admin</h2>
+                <p id="adminInfo">Loading...</p>
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#" class="nav-link active" onclick="showSection('dashboard')">
+                        <i class="fas fa-tachometer-alt"></i>
+                        Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" onclick="showSection('requests')">
+                        <i class="fas fa-file-alt"></i>
+                        VIN Requests
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" onclick="showSection('users')">
+                        <i class="fas fa-users"></i>
+                        Users
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" onclick="showSection('cache')">
+                        <i class="fas fa-database"></i>
+                        Cache
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Logout
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h1 id="pageTitle">Dashboard</h1>
+                <div class="header-actions">
+                    <button class="btn btn-primary" onclick="refreshData()">
+                        <i class="fas fa-sync-alt"></i>
+                        Refresh
+                    </button>
+                </div>
+            </div>
+
+            <div class="content">
+                <!-- Dashboard Section -->
+                <div id="dashboard" class="content-section">
+                    <h2>Dashboard Overview</h2>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h3>Total Users</h3>
+                            <div class="number" id="totalUsers">-</div>
+                            <div class="label">Registered Users</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Total Requests</h3>
+                            <div class="number" id="totalRequests">-</div>
+                            <div class="label">VIN Checks</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Pending</h3>
+                            <div class="number" id="pendingRequests">-</div>
+                            <div class="label">Awaiting Processing</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Completed</h3>
+                            <div class="number" id="completedRequests">-</div>
+                            <div class="label">Processed</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Requests Section -->
+                <div id="requests" class="content-section hidden">
+                    <h2>VIN Requests</h2>
+                    <div id="requestsContent">
+                        <div class="loading">Loading requests...</div>
+                    </div>
+                </div>
+
+                <!-- Users Section -->
+                <div id="users" class="content-section hidden">
+                    <h2>Users</h2>
+                    <div id="usersContent">
+                        <div class="loading">Loading users...</div>
+                    </div>
+                </div>
+
+                <!-- Cache Section -->
+                <div id="cache" class="content-section hidden">
+                    <h2>Cache Management</h2>
+                    <div id="cacheContent">
+                        <div class="loading">Loading cache...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentUser = null;
+
+        // Check authentication
+        function checkAuth() {
+            if (typeof EnhancedAuth !== 'undefined' && EnhancedAuth.isLoggedIn()) {
+                currentUser = EnhancedAuth.getCurrentUser();
+                if (currentUser && currentUser.type === 'admin') {
+                    document.getElementById('adminInfo').textContent = currentUser.name;
+                    return true;
+                }
+            }
+            window.location.href = '../Login/login.html';
+            return false;
+        }
+
+        // Show section
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Remove active class from all nav links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName).classList.remove('hidden');
+            
+            // Add active class to clicked nav link
+            event.target.classList.add('active');
+            
+            // Update page title
+            document.getElementById('pageTitle').textContent = 
+                sectionName.charAt(0).toUpperCase() + sectionName.slice(1);
+            
+            // Load section data
+            loadSectionData(sectionName);
+        }
+
+        // Load section data
+        async function loadSectionData(sectionName) {
+            try {
+                switch(sectionName) {
+                    case 'dashboard':
+                        await loadDashboard();
+                        break;
+                    case 'requests':
+                        await loadRequests();
+                        break;
+                    case 'users':
+                        await loadUsers();
+                        break;
+                    case 'cache':
+                        await loadCache();
+                        break;
+                }
+            } catch (error) {
+                console.error('Error loading section data:', error);
+                showError('Failed to load data: ' + error.message);
+            }
+        }
+
+        // Load dashboard data
+        async function loadDashboard() {
+            try {
+                const response = await fetch('../api.php/admin/users', {
+                    credentials: 'include'
+                });
+                const userData = await response.json();
+                
+                if (userData.success) {
+                    document.getElementById('totalUsers').textContent = userData.users.length;
+                }
+                
+                // Load requests
+                const requestsResponse = await fetch('../api.php/admin/requests', {
+                    credentials: 'include'
+                });
+                const requestsData = await requestsResponse.json();
+                
+                if (requestsData.success) {
+                    const requests = requestsData.requests;
+                    document.getElementById('totalRequests').textContent = requests.length;
+                    document.getElementById('pendingRequests').textContent = 
+                        requests.filter(r => r.status === 'pending').length;
+                    document.getElementById('completedRequests').textContent = 
+                        requests.filter(r => r.status === 'completed').length;
+                }
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+                showError('Failed to load dashboard data');
+            }
+        }
+
+        // Load requests
+        async function loadRequests() {
+            try {
+                const response = await fetch('../api.php/admin/requests', {
+                    credentials: 'include'
+                });
+                const data = await response.json();
+                
+                if (data.success) {
+                    const requests = data.requests;
+                    const tbody = requests.map(request => `
+                        <tr>
+                            <td>${request.request_id || request.id}</td>
+                            <td>${request.vin}</td>
+                            <td>${request.user_email || 'N/A'}</td>
+                            <td><span class="status-badge status-${request.status}">${request.status}</span></td>
+                            <td>${request.processed_at || 'N/A'}</td>
+                        </tr>
+                    `).join('');
+                    
+                    document.getElementById('requestsContent').innerHTML = `
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Request ID</th>
+                                    <th>VIN</th>
+                                    <th>User</th>
+                                    <th>Status</th>
+                                    <th>Processed</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${tbody}
+                            </tbody>
+                        </table>
+                    `;
+                } else {
+                    showError('Failed to load requests: ' + data.error);
+                }
+            } catch (error) {
+                showError('Failed to load requests: ' + error.message);
+            }
+        }
+
+        // Load users
+        async function loadUsers() {
+            try {
+                const response = await fetch('../api.php/admin/users', {
+                    credentials: 'include'
+                });
+                const data = await response.json();
+                
+                if (data.success) {
+                    const users = data.users;
+                    const tbody = users.map(user => `
+                        <tr>
+                            <td>${user.name}</td>
+                            <td>${user.email}</td>
+                            <td>${user.user_type || user.type}</td>
+                            <td>${user.credits}</td>
+                            <td>${user.created_at || 'N/A'}</td>
+                        </tr>
+                    `).join('');
+                    
+                    document.getElementById('usersContent').innerHTML = `
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Type</th>
+                                    <th>Credits</th>
+                                    <th>Created</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${tbody}
+                            </tbody>
+                        </table>
+                    `;
+                } else {
+                    showError('Failed to load users: ' + data.error);
+                }
+            } catch (error) {
+                showError('Failed to load users: ' + error.message);
+            }
+        }
+
+        // Load cache
+        async function loadCache() {
+            try {
+                const response = await fetch('../api.php/admin/cache', {
+                    credentials: 'include'
+                });
+                const data = await response.json();
+                
+                if (data.success) {
+                    const cache = data.cache;
+                    const tbody = cache.map(item => `
+                        <tr>
+                            <td>${item.vin}</td>
+                            <td>${item.data_source}</td>
+                            <td>${item.expires_at}</td>
+                            <td>${item.created_at}</td>
+                        </tr>
+                    `).join('');
+                    
+                    document.getElementById('cacheContent').innerHTML = `
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>VIN</th>
+                                    <th>Source</th>
+                                    <th>Expires</th>
+                                    <th>Created</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${tbody}
+                            </tbody>
+                        </table>
+                    `;
+                } else {
+                    showError('Failed to load cache: ' + data.error);
+                }
+            } catch (error) {
+                showError('Failed to load cache: ' + error.message);
+            }
+        }
+
+        // Refresh data
+        function refreshData() {
+            const activeSection = document.querySelector('.content-section:not(.hidden)').id;
+            loadSectionData(activeSection);
+        }
+
+        // Show error
+        function showError(message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error';
+            errorDiv.textContent = message;
+            document.querySelector('.content').appendChild(errorDiv);
+            
+            setTimeout(() => {
+                errorDiv.remove();
+            }, 5000);
+        }
+
+        // Logout
+        async function logout() {
+            console.log('Logout function called');
+            
+            try {
+                // Call API logout first
+                const response = await fetch('../api.php/auth/logout', {
+                    method: 'POST',
+                    credentials: 'include'
+                });
+                console.log('API logout response:', response.status);
+            } catch (error) {
+                console.log('API logout failed:', error);
+            }
+            
+            // Clear EnhancedAuth session
+            if (typeof EnhancedAuth !== 'undefined' && EnhancedAuth.logout) {
+                // Don't call EnhancedAuth.logout() as it redirects
+                // Just clear the token manually
+                if (typeof TokenManager !== 'undefined') {
+                    TokenManager.clearToken();
+                }
+            }
+            
+            // Clear all possible session data
+            localStorage.removeItem('vinaris_user');
+            localStorage.removeItem('vinaris_session');
+            localStorage.removeItem('vinaris_token');
+            sessionStorage.clear();
+            
+            console.log('All session data cleared');
+            
+            // Redirect to login immediately
+            window.location.href = '../Login/login.html';
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            if (checkAuth()) {
+                loadDashboard();
+            }
+        });
+    </script>
+</body>
+</html>

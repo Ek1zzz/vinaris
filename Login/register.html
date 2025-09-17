@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>რეგისტრაცია — VINaris</title>
+  <style>
+    :root{
+      --bg:#0b0b0d; --bg-soft:#121216; --card:#15151b;
+      --text:#e8e8ee; --muted:#a6a6b3; --primary:#e11d2e;
+      --primary-600:#c21827; --border:#23232b; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:16px; --radius-lg:24px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; min-height:100vh; display:flex; flex-direction:column;
+      font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans",Arial;
+      background: radial-gradient(1200px 600px at 80% -10%, rgba(225,29,46,.12), transparent 60%), var(--bg);
+      color:var(--text);
+    }
+    header{
+      backdrop-filter:saturate(180%) blur(10px);
+      background: linear-gradient(180deg, rgba(11,11,13,.9), rgba(11,11,13,.6));
+      border-bottom:1px solid var(--border);
+      padding:.8rem 1rem; display:flex; align-items:center; justify-content:space-between;
+    }
+    .brand{display:flex; align-items:center; gap:.6rem; color:var(--text); font-weight:800; text-decoration:none}
+    .logo{
+      width:32px; aspect-ratio:1; border-radius:10px; display:grid; place-items:center; font-weight:800;
+      background: radial-gradient(circle at 30% 20%, #ff4d5e, #7a0f17); color:white;
+    }
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
+      padding:.5rem 1rem; border-radius:12px; background:var(--primary); color:white; font-weight:600;
+      transition:.2s; border:1px solid rgba(255,255,255,.06);
+    }
+    .btn.secondary{background:#1f1f26; border:1px solid var(--border); color:var(--text)}
+    .btn.secondary:hover{background:#24242c}
+    .btn:hover{background:var(--primary-600)}
+    main{flex:1; display:flex; align-items:center; justify-content:center; padding:2rem}
+    .auth-card{
+      width:min(400px,92%); padding:32px; border-radius:var(--radius-lg);
+      background:var(--card); border:1px solid var(--border); box-shadow:var(--shadow);
+    }
+    .auth-card h2{text-align:center; margin:0 0 18px}
+    .auth-card label{display:block; margin:10px 0 6px; font-weight:600}
+    .auth-card input{
+      width:100%; padding:.9rem 1rem; border-radius:12px;
+      border:1px solid var(--border); background:#0f0f14; color:var(--text);
+    }
+    .actions{margin-top:18px; display:flex; flex-direction:column; gap:10px}
+    .muted{text-align:center; margin-top:12px; color:var(--muted)}
+    a{color:var(--primary); text-decoration:none}
+    .input-wrap{position:relative}
+    .toggle-pass{position:absolute; right:12px; top:50%; transform:translateY(-50%); background:none; border:none; color:var(--muted); cursor:pointer}
+    .error{color:#f87171; font-size:.85rem; margin-top:6px; display:none}
+    #strength{font-size:.85rem; margin-top:4px; color:var(--muted)}
+    footer{padding:24px 0; border-top:1px solid var(--border); color:#b8b8c6; text-align:center; font-size:.9rem}
+  </style>
+</head>
+<body>
+  <header>
+    <a href="../index.html" class="brand">
+      <div class="logo">V</div><span>VINaris</span>
+    </a>
+    <a href="../index.html" class="btn secondary">← მთავარი</a>
+  </header>
+
+  <main>
+    <div class="auth-card">
+      <h2>რეგისტრაცია</h2>
+      <form id="regForm">
+        <label>სახელი</label>
+        <input type="text" id="regName" placeholder="ნიკა" />
+        <label>ელ-ფოსტა</label>
+        <input type="email" id="regEmail" placeholder="you@example.com" />
+        <label>პაროლი</label>
+        <div class="input-wrap">
+          <input type="password" id="regPass" placeholder="••••••••" />
+          <button type="button" class="toggle-pass" onclick="togglePass('regPass')">👁️</button>
+        </div>
+        <p id="strength">პაროლის სიძლიერე: —</p>
+        <label>გაიმეორე პაროლი</label>
+        <div class="input-wrap">
+          <input type="password" id="regPass2" placeholder="••••••••" />
+          <button type="button" class="toggle-pass" onclick="togglePass('regPass2')">👁️</button>
+        </div>
+        <p class="error" id="regError">გთხოვ შეავსო ყველა ველი სწორად</p>
+        <div class="actions">
+          <button class="btn" type="submit">რეგისტრაცია</button>
+          <a href="login.html" class="btn secondary">უკან შესვლაზე</a>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <footer>
+    © <span id="year"></span> VINaris. ყველა უფლება დაცულია.
+  </footer>
+
+<script src="../js/xampp-api-utils.js"></script>
+<script>
+document.getElementById("year").textContent = new Date().getFullYear();
+
+function togglePass(id){
+  const input=document.getElementById(id);
+  input.type = input.type==="password" ? "text" : "password";
+}
+
+// Check if already logged in
+if (EnhancedAuth.isLoggedIn()) {
+  const user = EnhancedAuth.getCurrentUser();
+  const redirectPath = user.type === 'admin' ? '../Adminpanel/enhanced-admin-panel-fixed.html' : '../Userpanel/enhanced-user-panel.html';
+  window.location.href = redirectPath;
+}
+
+document.getElementById("regPass").addEventListener("input", e=>{
+  const v=e.target.value;
+  const strength=document.getElementById("strength");
+  if(v.length<6) {
+    strength.textContent="პაროლის სიძლიერე: სუსტი";
+    strength.style.color="#ff6b6b";
+  } else if(/[0-9]/.test(v)&&/[A-Z]/.test(v)) {
+    strength.textContent="პაროლის სიძლიერე: ძლიერი";
+    strength.style.color="#22c55e";
+  } else {
+    strength.textContent="პაროლის სიძლიერე: საშუალო";
+    strength.style.color="#f59e0b";
+  }
+});
+
+document.getElementById("regForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  
+  const name = document.getElementById("regName").value.trim();
+  const email = document.getElementById("regEmail").value.trim();
+  const pass = document.getElementById("regPass").value.trim();
+  const pass2 = document.getElementById("regPass2").value.trim();
+  const err = document.getElementById("regError");
+  const submitBtn = e.target.querySelector('button[type="submit"]');
+  
+  // Enhanced validation
+  if(!name) {
+    err.style.display="block";
+    err.textContent = "სახელი აუცილებელია";
+    return;
+  }
+  
+  if(!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    err.style.display="block";
+    err.textContent = "გთხოვ შეიყვანოთ სწორი ელ-ფოსტა";
+    return;
+  }
+  
+  if(!pass || pass.length < 6) {
+    err.style.display="block";
+    err.textContent = "პაროლი უნდა იყოს მინიმუმ 6 სიმბოლო";
+    return;
+  }
+  
+  if(pass !== pass2) {
+    err.style.display="block";
+    err.textContent = "პაროლები არ ემთხვევა";
+    return;
+  }
+  
+  err.style.display="none";
+  submitBtn.innerHTML = '⏳ რეგისტრაცია...';
+  submitBtn.disabled = true;
+  
+  try {
+    EnhancedUI.showLoading('მომხმარებლის შექმნა...');
+    
+    const user = await EnhancedAuth.register(name, email, pass);
+    
+    EnhancedUI.hideLoading();
+    submitBtn.innerHTML = '✅ წარმატება';
+    
+    // Redirect to user panel
+    setTimeout(() => {
+      window.location.href = '../Userpanel/enhanced-user-panel.html';
+    }, 2000);
+    
+  } catch (error) {
+    EnhancedUI.hideLoading();
+    submitBtn.innerHTML = 'რეგისტრაცია';
+    submitBtn.disabled = false;
+    err.style.display="block";
+    
+    // Better error message handling
+    let errorMessage = error.message;
+    if (error.message.includes('Failed to fetch')) {
+      errorMessage = 'სერვერთან კავშირი ვერ მოხერხდა. გთხოვ სცადო თავიდან.';
+    } else if (error.message.includes('Invalid email format')) {
+      errorMessage = 'გთხოვ შეიყვანო სწორი ელ-ფოსტის მისამართი';
+    } else if (error.message.includes('Password too short')) {
+      errorMessage = 'პაროლი უნდა იყოს მინიმუმ 6 სიმბოლო';
+    } else if (error.message.includes('Missing required field')) {
+      errorMessage = 'გთხოვ შეავსო ყველა აუცილებელი ველი';
+    }
+    
+    err.textContent = errorMessage;
+    console.error('Registration error:', error);
+  }
+});
+</script>
+</body>
+</html>

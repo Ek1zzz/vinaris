@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VINaris User Panel - Choose Version</title>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            margin: 0;
+            padding: 40px 20px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            max-width: 600px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 32px;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #e60000, #dc2626);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subtitle {
+            color: #a1a1aa;
+            margin-bottom: 40px;
+            font-size: 16px;
+        }
+        
+        .versions {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .version-card {
+            background: #1a1a20;
+            border: 1px solid #2a2a30;
+            border-radius: 16px;
+            padding: 24px;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .version-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(135deg, #e60000, #dc2626);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .version-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            border-color: rgba(230, 0, 0, 0.3);
+        }
+        
+        .version-card:hover::before {
+            opacity: 1;
+        }
+        
+        .version-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .version-description {
+            color: #a1a1aa;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+        
+        .version-features {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .version-features li {
+            color: #e4e4e7;
+            font-size: 13px;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .version-features li::before {
+            content: '✓';
+            color: #22c55e;
+            font-weight: bold;
+        }
+        
+        .new-badge {
+            background: linear-gradient(135deg, #e60000, #dc2626);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            position: absolute;
+            top: 16px;
+            right: 16px;
+        }
+        
+        .current-badge {
+            background: #22c55e;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            position: absolute;
+            top: 16px;
+            right: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>VINaris User Panel</h1>
+        <p class="subtitle">Choose your preferred version</p>
+        
+        <div class="versions">
+            <a href="enhanced-user-panel-stable.html" class="version-card">
+                <div class="new-badge">RECOMMENDED</div>
+                <div class="version-title">Stable Version 2.1</div>
+                <div class="version-description">Clean, reliable design with improved stability</div>
+                <ul class="version-features">
+                    <li>Simple, clean interface design</li>
+                    <li>Stable performance and reliability</li>
+                    <li>Better error handling</li>
+                    <li>Mobile responsive design</li>
+                    <li>Professional notification system</li>
+                    <li>No complex animations or effects</li>
+                </ul>
+            </a>
+            
+            <a href="enhanced-user-panel-v2.html" class="version-card">
+                <div class="new-badge">EXPERIMENTAL</div>
+                <div class="version-title">Enhanced Version 2.0</div>
+                <div class="version-description">Modern, responsive design with advanced features</div>
+                <ul class="version-features">
+                    <li>Glassmorphism design with backdrop blur</li>
+                    <li>Enhanced animations and micro-interactions</li>
+                    <li>Better mobile responsiveness</li>
+                    <li>Improved accessibility features</li>
+                    <li>Modern gradient accents and typography</li>
+                    <li>Professional notification system</li>
+                </ul>
+            </a>
+            
+            <a href="enhanced-user-panel.html" class="version-card">
+                <div class="current-badge">CURRENT</div>
+                <div class="version-title">Current Version 1.0</div>
+                <div class="version-description">Stable, reliable interface with core functionality</div>
+                <ul class="version-features">
+                    <li>Proven stable design</li>
+                    <li>Core VIN checking functionality</li>
+                    <li>Basic responsive design</li>
+                    <li>Simple, clean interface</li>
+                    <li>Reliable performance</li>
+                </ul>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

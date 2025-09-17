@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - VINaris</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: linear-gradient(135deg, #0b0b0f 0%, #1e1e2e 50%, #2a2a3a 100%);
+            --card-bg: rgba(40, 44, 52, 0.95);
+            --accent: #00b3ff;
+            --accent-hover: #0088d1;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b8c1;
+            --text-muted: #7c8591;
+            --border: rgba(255, 255, 255, 0.1);
+            --border-light: rgba(255, 255, 255, 0.05);
+            --success: #00d084;
+            --warning: #ff9500;
+            --error: #ff375f;
+            --shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            --shadow-light: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            overflow: hidden;
+            margin: 0;
+        }
+
+        .profile-container {
+            width: 100%;
+            max-width: 480px;
+            max-height: 95vh;
+            background: var(--card-bg);
+            border-radius: 24px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(20px);
+            overflow: hidden;
+            position: relative;
+            animation: profileSlideIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .profile-header {
+            background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+            padding: 32px 24px 24px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 32px;
+            font-weight: 700;
+            color: white;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        .profile-name {
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .profile-email {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+            position: relative;
+            z-index: 1;
+        }
+
+        .profile-content {
+            padding: 24px;
+            max-height: calc(95vh - 200px);
+            overflow-y: auto;
+        }
+
+        .profile-section {
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .detail-value {
+            font-size: 14px;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .detail-value.highlight {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .profile-actions {
+            display: flex;
+            gap: 12px;
+            padding: 24px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 179, 255, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        /* Edit Form Styles */
+        .edit-form {
+            display: none;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .edit-form.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .btn-save {
+            background: var(--success);
+            color: white;
+            flex: 1;
+        }
+
+        .btn-cancel {
+            background: var(--error);
+            color: white;
+            flex: 1;
+        }
+
+        /* Animations */
+        @keyframes profileSlideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        @keyframes profileSlideOut {
+            from {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+            to {
+                opacity: 0;
+                transform: scale(0.9) translateY(20px);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(180deg); }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .loading .profile-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 200px;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--border);
+            border-top: 4px solid var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .profile-container {
+                margin: 0;
+                border-radius: 0;
+                height: 100vh;
+                max-height: 100vh;
+            }
+            
+            .profile-content {
+                padding: 20px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <div class="profile-header">
+            <div class="profile-avatar" id="profileAvatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="profile-name" id="profileName">მომხმარებელი</div>
+            <div class="profile-email" id="profileEmail">N/A</div>
+        </div>
+
+        <div class="profile-content">
+            <!-- Edit Form -->
+            <div class="edit-form" id="editForm">
+                <h3 style="margin-bottom: 20px; color: var(--text-primary);">პროფილის რედაქტირება</h3>
+                
+                <div class="form-group">
+                    <label class="form-label">სახელი</label>
+                    <input type="text" class="form-input" id="editName" placeholder="შეიყვანეთ სახელი">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">ტელეფონი</label>
+                    <input type="tel" class="form-input" id="editPhone" placeholder="+995 5XX XXX XXX">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">კომპანია</label>
+                    <input type="text" class="form-input" id="editCompany" placeholder="კომპანიის სახელი">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">მისამართი</label>
+                    <input type="text" class="form-input" id="editAddress" placeholder="სრული მისამართი">
+            </div>
+                
+                <div class="form-actions">
+                    <button class="btn btn-save" onclick="saveProfile()">
+                        <i class="fas fa-save"></i>
+                        შენახვა
+                    </button>
+                    <button class="btn btn-cancel" onclick="cancelEdit()">
+                        <i class="fas fa-times"></i>
+                        გაუქმება
+                    </button>
+            </div>
+            </div>
+
+            <!-- Profile Information -->
+            <div class="profile-section">
+                <div class="section-title">
+                    <i class="fas fa-user-circle"></i>
+                    პირადი ინფორმაცია
+        </div>
+
+            <div class="detail-row">
+                <div class="detail-label">
+                    <i class="fas fa-id-card"></i>
+                    მომხმარებლის ID
+                </div>
+                    <div class="detail-value" id="userId">N/A</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">
+                    <i class="fas fa-calendar-plus"></i>
+                    რეგისტრაციის თარიღი
+                </div>
+                    <div class="detail-value" id="registrationDate">N/A</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">
+                    <i class="fas fa-coins"></i>
+                    ბალანსი
+                </div>
+                <div class="detail-value highlight" id="currentBalance">0 კრედიტი</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">
+                    <i class="fas fa-clock"></i>
+                    ბოლო აქტივობა
+                </div>
+                <div class="detail-value" id="lastActivity">-</div>
+                </div>
+            </div>
+
+            <!-- Statistics -->
+            <div class="profile-section">
+                <div class="section-title">
+                    <i class="fas fa-chart-bar"></i>
+                    სტატისტიკა
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="requestsCount">0</div>
+                        <div class="stat-label">VIN მოთხოვნები</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="successCount">0</div>
+                        <div class="stat-label">წარმატებული</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="profile-actions">
+            <button class="btn btn-secondary" onclick="closeProfile()">
+                <i class="fas fa-times"></i>
+                დახურვა
+            </button>
+            <button class="btn btn-primary" id="editProfileBtn" onclick="toggleEdit()">
+                <i class="fas fa-edit"></i>
+                რედაქტირება
+            </button>
+        </div>
+    </div>
+
+    <script src="../../js/xampp-api-utils.js"></script>
+    <script>
+        let isEditMode = false;
+        let originalData = {};
+
+        // Initialize profile popup
+        document.addEventListener('DOMContentLoaded', function() {
+            // Wait a bit for session to be available
+            setTimeout(() => {
+                checkAuthentication();
+            }, 100);
+        });
+
+        async function checkAuthentication() {
+            try {
+                console.log('Checking authentication...');
+                
+                // First check if we have cached user data
+                let isLoggedIn = EnhancedAuth.isLoggedIn();
+                let currentUser = EnhancedAuth.getCurrentUser();
+                
+                console.log('Initial auth check - isLoggedIn:', isLoggedIn, 'currentUser:', currentUser);
+                
+                // If no cached data, try to fetch from API
+                if (!isLoggedIn || !currentUser) {
+                    console.log('No cached data, trying API...');
+                    try {
+                        const response = await fetch('/Vinaris/api.php/users/profile', {
+                            method: 'GET',
+                            credentials: 'include'
+                        });
+                        
+                        console.log('API response status:', response.status);
+                        
+                        if (response.ok) {
+                            const data = await response.json();
+                            console.log('API response data:', data);
+                            
+                            if (data.success) {
+                                currentUser = data.user;
+                                TokenManager.setCurrentUser(currentUser);
+                                isLoggedIn = true;
+                                console.log('Successfully authenticated via API');
+                            }
+                        }
+                    } catch (error) {
+                        console.warn('Failed to fetch profile from API:', error);
+                    }
+                }
+                
+                if (!isLoggedIn || !currentUser) {
+                    console.log('User not authenticated, redirecting to login');
+                    window.location.href = '../../Login/login.html';
+                return;
+            }
+            
+                console.log('User authenticated, proceeding with profile load');
+                // User is authenticated, proceed
+            loadProfileData();
+            setupEventListeners();
+                
+            } catch (error) {
+                console.error('Authentication check failed:', error);
+                window.location.href = '../../Login/login.html';
+            }
+        }
+
+        async function loadProfileData() {
+            try {
+                // Show loading state
+                document.body.classList.add('loading');
+                
+                // Get current user and fetch fresh profile data
+                let currentUser = EnhancedAuth.getCurrentUser();
+                
+                try {
+                    // Try to fetch fresh data from API
+                    const profileData = await UserManager.getProfile();
+                    currentUser = profileData.user;
+                    
+                    // Update cached user data
+                    TokenManager.setCurrentUser(currentUser);
+                } catch (apiError) {
+                    // If API fails, use cached data
+                    console.warn('Using cached user data:', apiError);
+                }
+
+                // Update profile information
+                updateProfileUI(currentUser);
+                
+                // Load additional statistics
+                await loadStatistics(currentUser);
+                
+                // Hide loading state
+                document.body.classList.remove('loading');
+                
+            } catch (error) {
+                console.error('Error loading profile data:', error);
+                document.body.classList.remove('loading');
+                showError('პროფილის ჩატვირთვა ვერ მოხერხდა: ' + error.message);
+            }
+        }
+
+        function updateProfileUI(user) {
+            // Update basic profile info
+            document.getElementById('profileName').textContent = user.name || 'მომხმარებელი';
+            document.getElementById('profileEmail').textContent = user.email || 'N/A';
+            document.getElementById('userId').textContent = user.uniqueId || user.id || 'N/A';
+            document.getElementById('currentBalance').textContent = `${user.credits || 0} კრედიტი`;
+
+            // Update avatar with first letter of name
+            const avatar = document.getElementById('profileAvatar');
+            if (user.name) {
+                avatar.innerHTML = user.name.charAt(0).toUpperCase();
+            } else {
+                avatar.innerHTML = '<i class="fas fa-user"></i>';
+            }
+
+            // Format registration date
+            const regDate = user.joinDate || user.registrationTime || user.createdAt;
+            if (regDate) {
+                const formatted = EnhancedUI.formatDate(regDate);
+                document.getElementById('registrationDate').textContent = formatted;
+            } else {
+                document.getElementById('registrationDate').textContent = 'N/A';
+            }
+
+            // Update last activity (use current time as fallback)
+            const lastActivity = user.lastActivity || user.lastLogin || new Date().toISOString();
+            document.getElementById('lastActivity').textContent = EnhancedUI.formatDate(lastActivity);
+
+            // Animate credit count
+            animateValue(document.getElementById('currentBalance'), user.credits || 0);
+        }
+
+        async function loadStatistics(user) {
+            try {
+                // Load VIN requests data
+                const requests = await VinRequestManager.getUserRequests();
+                const processedRequests = requests.filter(r => r.status === 'processed' || r.status === 'delivered');
+
+                // Update statistics with animation
+                animateValue(document.getElementById('requestsCount'), requests.length);
+                animateValue(document.getElementById('successCount'), processedRequests.length);
+                
+            } catch (error) {
+                console.error('Error loading statistics:', error);
+                // Use basic statistics from user object
+                animateValue(document.getElementById('requestsCount'), user.totalVinChecked || 0);
+                animateValue(document.getElementById('successCount'), Math.floor((user.totalVinChecked || 0) * 0.8));
+            }
+        }
+
+        function animateValue(element, targetValue, duration = 1000) {
+            const startValue = 0;
+            const startTime = performance.now();
+
+            function updateValue(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                // Easing function for smooth animation
+                const easedProgress = 1 - Math.pow(1 - progress, 3);
+                const currentValue = Math.floor(startValue + (targetValue - startValue) * easedProgress);
+                
+                element.textContent = currentValue;
+
+                if (progress < 1) {
+                    requestAnimationFrame(updateValue);
+                }
+            }
+
+            requestAnimationFrame(updateValue);
+        }
+
+        function setupEventListeners() {
+            // Close on Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    if (isEditMode) {
+                        cancelEdit();
+                    } else {
+                    closeProfile();
+                    }
+                }
+            });
+
+            // Close on outside click
+            document.addEventListener('click', function(e) {
+                const container = document.querySelector('.profile-container');
+                if (container && !container.contains(e.target) && e.target !== container) {
+                    closeProfile();
+                }
+            });
+        }
+
+        function toggleEdit() {
+            console.log('Toggle edit called, current mode:', isEditMode);
+            if (isEditMode) {
+                cancelEdit();
+            } else {
+                startEdit();
+            }
+        }
+
+        function startEdit() {
+            console.log('Starting edit mode');
+            isEditMode = true;
+            const editForm = document.getElementById('editForm');
+            const editBtn = document.getElementById('editProfileBtn');
+            
+            console.log('Edit form element:', editForm);
+            console.log('Edit button element:', editBtn);
+            
+            // Store original data
+            const currentUser = EnhancedAuth.getCurrentUser();
+            originalData = {
+                name: currentUser.name || '',
+                phone: currentUser.phone || '',
+                company: currentUser.company || '',
+                address: currentUser.address || ''
+            };
+            
+            console.log('Original data:', originalData);
+            
+            // Populate form with current data
+            document.getElementById('editName').value = originalData.name;
+            document.getElementById('editPhone').value = originalData.phone;
+            document.getElementById('editCompany').value = originalData.company;
+            document.getElementById('editAddress').value = originalData.address;
+            
+            // Show edit form
+            editForm.classList.add('active');
+            editBtn.innerHTML = '<i class="fas fa-times"></i> გაუქმება';
+            editBtn.classList.remove('btn-primary');
+            editBtn.classList.add('btn-secondary');
+            
+            console.log('Edit form classes after adding active:', editForm.className);
+        }
+
+        function cancelEdit() {
+            isEditMode = false;
+            const editForm = document.getElementById('editForm');
+            const editBtn = document.getElementById('editProfileBtn');
+            
+            // Hide edit form
+            editForm.classList.remove('active');
+            editBtn.innerHTML = '<i class="fas fa-edit"></i> რედაქტირება';
+            editBtn.classList.remove('btn-secondary');
+            editBtn.classList.add('btn-primary');
+        }
+
+        async function saveProfile() {
+            try {
+                const editForm = document.getElementById('editForm');
+                editForm.style.opacity = '0.6';
+                editForm.style.pointerEvents = 'none';
+                
+                const profileData = {
+                    name: document.getElementById('editName').value.trim(),
+                    phone: document.getElementById('editPhone').value.trim(),
+                    company: document.getElementById('editCompany').value.trim(),
+                    address: document.getElementById('editAddress').value.trim()
+                };
+                
+                // Validate required fields
+                if (!profileData.name) {
+                    EnhancedUI.showToast('სახელი აუცილებელია', 'error');
+                    return;
+                }
+                
+                // Update profile
+                const updatedUser = await UserManager.updateProfile(profileData);
+                
+                // Update UI with new data
+                updateProfileUI(updatedUser);
+                
+                // Exit edit mode
+                cancelEdit();
+                
+            } catch (error) {
+                console.error('Error saving profile:', error);
+                EnhancedUI.showToast('პროფილის შენახვა ვერ მოხერხდა: ' + error.message, 'error');
+            } finally {
+                const editForm = document.getElementById('editForm');
+                editForm.style.opacity = '1';
+                editForm.style.pointerEvents = 'auto';
+            }
+        }
+
+        function showError(message) {
+            const container = document.querySelector('.profile-content');
+            if (container) {
+                container.innerHTML = `
+                    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 30px; text-align: center;">
+                        <div style="width: 60px; height: 60px; background: var(--error); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
+                            <i class="fas fa-exclamation-triangle" style="color: white; font-size: 24px;"></i>
+                        </div>
+                        <h3 style="color: var(--text-primary); margin-bottom: 10px;">შეცდომა</h3>
+                        <p style="color: var(--text-secondary); margin-bottom: 20px;">${message}</p>
+                        <button onclick="loadProfileData()" style="background: var(--accent); color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-weight: 600;">
+                            <i class="fas fa-redo"></i> ხელახლა ცდა
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        function closeProfile() {
+            // Add close animation
+            const container = document.querySelector('.profile-container');
+            if (container) {
+                container.style.animation = 'profileSlideOut 0.3s cubic-bezier(0.55, 0.055, 0.675, 0.19) forwards';
+            }
+            
+            setTimeout(() => {
+                // Check if this is a popup window
+                if (window.opener) {
+                    window.close();
+                } else {
+                    // If not opened as popup, redirect to main panel
+                    window.location.href = '../enhanced-user-panel.html';
+                }
+            }, 300);
+        }
+
+        // Prevent multiple redirects
+        let redirecting = false;
+        const originalCloseProfile = closeProfile;
+        closeProfile = function() {
+            if (redirecting) return;
+            redirecting = true;
+            originalCloseProfile();
+        };
+    </script>
+</body>
+</html>

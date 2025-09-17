@@ -1,0 +1,1869 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>VINaris — პროფესიონალური VIN ისტორიის ანგარიშები | სწრაფი და ზუსტი</title>
+  <meta name="description" content="VINaris — პროფესიონალური VIN შემოწმების სერვისი Carfax & AutoCheck ინტეგრაციით. მიიღეთ დეტალური ავტომობილის ისტორიის ანგარიშები, აუქციონის ფოტოები და სრული ანალიზი." />
+  <meta name="keywords" content="VIN შემოწმება, ავტომობილის ისტორია, Carfax, AutoCheck, მანქანის ისტორიის ანგარიში, აუქციონის ფოტოები, საქართველო">
+  <link rel="canonical" href="https://vinaris.ge" />
+  
+  <!-- Open Graph meta tags -->
+  <meta property="og:title" content="VINaris — პროფესიონალური VIN ისტორიის ანგარიშები" />
+  <meta property="og:description" content="მიიღეთ სრული ავტომობილის ისტორიის ანგარიშები აუქციონის ფოტოებით და დეტალური ანალიზით" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://vinaris.ge" />
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ctext y='18' font-size='18'%3EV%3C/text%3E%3C/svg%3E">
+  
+  <style>
+    :root {
+      --bg: #0a0a0c;
+      --bg-soft: #111114;
+      --card: #16161b;
+      --card-hover: #1a1a20;
+      --text: #f0f0f4;
+      --muted: #9999a8;
+      --primary: #e60000;
+      --primary-hover: #cc0000;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --border: #2a2a30;
+      --border-light: #34343c;
+      --shadow: 0 20px 40px rgba(0,0,0,0.4);
+      --shadow-lg: 0 30px 60px rgba(0,0,0,0.5);
+      --radius: 16px;
+      --radius-lg: 24px;
+      --gradient-primary: linear-gradient(135deg, #e60000, #b30000);
+      --gradient-card: linear-gradient(145deg, #16161b, #14141a);
+      --backdrop: saturate(180%) blur(20px);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: 
+        radial-gradient(1400px 800px at 90% -20%, rgba(230, 0, 0, 0.08), transparent 70%),
+        radial-gradient(800px 600px at 10% 120%, rgba(34, 197, 94, 0.04), transparent 50%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Typography */
+    h1, h2, h3, h4, h5, h6 {
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    /* Layout */
+    .container {
+      width: min(1200px, 92%);
+      margin-inline: auto;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 1rem 1.5rem;
+      border-radius: var(--radius);
+      background: var(--gradient-primary);
+      color: white;
+      font-weight: 600;
+      font-size: 0.95rem;
+      border: none;
+      cursor: pointer;
+      box-shadow: 
+        0 4px 12px rgba(230, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.6s ease;
+    }
+
+    .btn:hover::before {
+      left: 100%;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 
+        0 8px 20px rgba(230, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    }
+
+    .btn:active {
+      transform: translateY(-1px);
+    }
+
+    .btn.secondary {
+      background: var(--gradient-card);
+      border: 1px solid var(--border-light);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      color: var(--text);
+    }
+
+    .btn.secondary:hover {
+      background: var(--card-hover);
+      border-color: var(--primary);
+    }
+
+    .btn.ghost {
+      background: transparent;
+      border: 1px solid var(--border);
+      box-shadow: none;
+    }
+
+    .btn.ghost:hover {
+      background: var(--card);
+      border-color: var(--primary);
+    }
+
+    /* Header */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      backdrop-filter: var(--backdrop);
+      background: rgba(10, 10, 12, 0.8);
+      border-bottom: 1px solid var(--border);
+      transition: all 0.3s ease;
+    }
+
+    header.scrolled {
+      background: rgba(10, 10, 12, 0.95);
+      border-bottom-color: var(--border-light);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 0;
+      transition: padding 0.3s ease;
+    }
+
+    header.scrolled .nav {
+      padding: 0.75rem 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 1.25rem;
+      font-weight: 800;
+      z-index: 1001;
+    }
+
+    .logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: var(--gradient-primary);
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      color: white;
+      box-shadow: 
+        0 4px 12px rgba(230, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .logo:hover {
+      transform: rotate(5deg) scale(1.05);
+    }
+
+    .menu {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .menu a {
+      color: var(--muted);
+      font-weight: 500;
+      position: relative;
+      transition: color 0.2s ease;
+    }
+
+    .menu a:hover {
+      color: var(--text);
+    }
+
+    .menu a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--primary);
+      transition: width 0.2s ease;
+    }
+
+    .menu a:hover::after {
+      width: 100%;
+    }
+
+    /* Mobile menu */
+    .mobile-menu-btn {
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .mobile-menu-btn span {
+      width: 24px;
+      height: 2px;
+      background: var(--text);
+      transition: all 0.3s ease;
+    }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(10, 10, 12, 0.98);
+      backdrop-filter: var(--backdrop);
+      z-index: 999;
+      padding: 6rem 2rem 2rem;
+    }
+
+    .mobile-menu.active {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .mobile-menu a {
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 6rem 0 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 20% 50%, rgba(230, 0, 0, 0.1), transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(34, 197, 94, 0.08), transparent 40%);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 4rem;
+      align-items: start;
+      position: relative;
+      z-index: 2;
+    }
+
+
+    .hero h1 {
+      font-size: clamp(2.5rem, 5vw, 3.5rem);
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, var(--text), var(--muted));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero .lead {
+      font-size: 1.2rem;
+      color: var(--muted);
+      margin-bottom: 1rem;
+      line-height: 1.5;
+    }
+
+    .vin-checker {
+      background: var(--gradient-card);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: 1rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .vin-checker::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--primary), transparent);
+    }
+
+    .vin-input-group {
+      display: flex;
+      gap: 0.75rem;
+      align-items: stretch;
+    }
+
+    .vin-input {
+      flex: 1;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      font-size: 1.1rem;
+      color: var(--text);
+      transition: all 0.2s ease;
+    }
+
+    .vin-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(230, 0, 0, 0.1);
+    }
+
+    .features-badges {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+
+    .badge {
+      background: rgba(34, 197, 94, 0.1);
+      border: 1px solid rgba(34, 197, 94, 0.2);
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      color: var(--success);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .partners {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .partner-logo {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 0.75rem 1.25rem;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--muted);
+      transition: all 0.2s ease;
+    }
+
+    .partner-logo:hover {
+      border-color: var(--primary);
+      color: var(--text);
+    }
+
+    /* Hero Card */
+    .hero-card {
+      background: var(--gradient-card);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(230, 0, 0, 0.1), transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-card h3 {
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+
+    .hero-card p {
+      color: var(--muted);
+      margin-bottom: 2rem;
+    }
+
+    .features-grid {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .feature-item {
+      background: rgba(22, 22, 27, 0.8);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 0;
+      background: var(--primary);
+      transition: height 0.3s ease;
+    }
+
+    .feature-item:hover::before {
+      height: 100%;
+    }
+
+    .feature-item:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+      background: rgba(22, 22, 27, 1);
+    }
+
+    .feature-num {
+      width: 40px;
+      height: 40px;
+      background: var(--gradient-primary);
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      color: white;
+      margin-bottom: 1rem;
+      box-shadow: 0 4px 12px rgba(230, 0, 0, 0.3);
+    }
+
+    .feature-item h4 {
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+    }
+
+    .feature-item p {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    /* Sections */
+    section {
+      padding: 5rem 0;
+      position: relative;
+    }
+
+    section:not(:last-of-type) {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .section-header h2 {
+      font-size: clamp(2rem, 4vw, 2.5rem);
+      margin-bottom: 1rem;
+    }
+
+    .section-header p {
+      font-size: 1.2rem;
+      color: var(--muted);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Pricing */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .price-card {
+      background: var(--gradient-card);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .price-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--success));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .price-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--primary);
+    }
+
+    .price-card:hover::before {
+      opacity: 1;
+    }
+
+    .price-card.popular {
+      border: 2px solid var(--primary);
+      background: 
+        linear-gradient(145deg, rgba(230, 0, 0, 0.1), transparent),
+        var(--gradient-card);
+    }
+
+    .price-card.popular::before {
+      opacity: 1;
+    }
+
+    .popular-badge {
+      position: absolute;
+      top: -1px;
+      right: 2rem;
+      background: var(--primary);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 0 0 12px 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .price {
+      font-size: 3rem;
+      font-weight: 800;
+      color: var(--text);
+      margin: 1.5rem 0;
+    }
+
+    .price small {
+      font-size: 1rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .price-features {
+      list-style: none;
+      margin: 2rem 0;
+      text-align: left;
+    }
+
+    .price-features li {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.5rem 0;
+      color: var(--muted);
+    }
+
+    .price-features li::before {
+      content: '✓';
+      color: var(--success);
+      font-weight: bold;
+    }
+
+    .price-features li.unavailable {
+      opacity: 0.5;
+    }
+
+    .price-features li.unavailable::before {
+      content: '✗';
+      color: var(--danger);
+    }
+
+    /* Process Steps */
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+
+    .step {
+      background: var(--gradient-card);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius);
+      padding: 2rem;
+      text-align: center;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .step:hover {
+      transform: translateY(-4px);
+      border-color: var(--primary);
+    }
+
+    .step-num {
+      width: 60px;
+      height: 60px;
+      background: var(--gradient-primary);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: white;
+      margin: 0 auto 1.5rem;
+      box-shadow: 0 8px 20px rgba(230, 0, 0, 0.3);
+    }
+
+    .step h3 {
+      margin-bottom: 1rem;
+      font-size: 1.3rem;
+    }
+
+    .step p {
+      color: var(--muted);
+    }
+
+    /* FAQ */
+    .faq-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    details {
+      background: var(--gradient-card);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius);
+      margin-bottom: 1rem;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    details:hover {
+      border-color: var(--primary);
+    }
+
+    details[open] {
+      border-color: var(--primary);
+    }
+
+    summary {
+      padding: 1.5rem 2rem;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.2s ease;
+    }
+
+    summary:hover {
+      background: rgba(230, 0, 0, 0.05);
+    }
+
+    summary::after {
+      content: '+';
+      font-size: 1.5rem;
+      color: var(--primary);
+      transition: transform 0.3s ease;
+    }
+
+    details[open] summary::after {
+      transform: rotate(45deg);
+    }
+
+    details p {
+      padding: 0 2rem 2rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* Contact Form */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 3rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 1rem 1.25rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: var(--text);
+      font-size: 1rem;
+      transition: all 0.2s ease;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(230, 0, 0, 0.1);
+    }
+
+    .contact-info {
+      background: var(--gradient-card);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius);
+      padding: 2rem;
+      height: fit-content;
+    }
+
+    .contact-info h3 {
+      margin-bottom: 1.5rem;
+      font-size: 1.3rem;
+    }
+
+    .contact-item {
+      margin-bottom: 2rem;
+    }
+
+    .contact-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .contact-item h4 {
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+
+    .contact-item p {
+      color: var(--muted);
+    }
+
+    /* Footer */
+    footer {
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      padding: 3rem 0 2rem;
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .footer-links a {
+      color: var(--muted);
+      transition: color 0.2s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--text);
+    }
+
+    .footer-copy {
+      text-align: right;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    /* Loading Animation */
+    .loading {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .loading-spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: currentColor;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Toast Notifications */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--card);
+      border: 1px solid var(--border-light);
+      border-radius: 12px;
+      padding: 1rem 1.5rem;
+      box-shadow: var(--shadow);
+      z-index: 10000;
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+    }
+
+    .toast.show {
+      transform: translateX(0);
+    }
+
+    .toast.success {
+      border-color: var(--success);
+      background: rgba(34, 197, 94, 0.1);
+    }
+
+    .toast.error {
+      border-color: var(--danger);
+      background: rgba(239, 68, 68, 0.1);
+    }
+
+    .toast.warning {
+      border-color: var(--warning);
+      background: rgba(245, 158, 11, 0.1);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 968px) {
+      .hero-content {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .footer-content {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        text-align: center;
+      }
+
+      .footer-copy {
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .menu {
+        display: none;
+      }
+
+      .mobile-menu-btn {
+        display: flex;
+      }
+
+      .hero {
+        padding: 5rem 0 3rem;
+      }
+
+      .section-header h2 {
+        font-size: 2rem;
+      }
+
+      .vin-input-group {
+        flex-direction: column;
+      }
+
+      .pricing-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .steps-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-fade-in {
+      animation: fadeInUp 0.6s ease-out forwards;
+    }
+
+    /* Utility Classes */
+    .text-primary { color: var(--primary); }
+    .text-success { color: var(--success); }
+    .text-warning { color: var(--warning); }
+    .text-muted { color: var(--muted); }
+    .mb-0 { margin-bottom: 0; }
+    .mb-1 { margin-bottom: 0.5rem; }
+    .mb-2 { margin-bottom: 1rem; }
+    .mb-3 { margin-bottom: 1.5rem; }
+    .mt-0 { margin-top: 0; }
+    .mt-1 { margin-top: 0.5rem; }
+    .mt-2 { margin-top: 1rem; }
+    .mt-3 { margin-top: 1.5rem; }
+  </style>
+</head>
+<body>
+  <!-- Include Enhanced Utils -->
+  <script src="js/xampp-api-utils.js?v=20250109"></script>
+  
+  <!-- Simple redirect for XAMPP compatibility -->
+  <script>
+    // Check if we're running on XAMPP and redirect if needed
+    if (window.location.hostname === 'localhost' && window.location.port === '80') {
+      // We're on XAMPP, ensure we're using the right path
+      if (!window.location.pathname.includes('/Vinaris/')) {
+        window.location.href = '/Vinaris/';
+      }
+    }
+  </script>
+
+  <!-- Header -->
+  <header id="header">
+    <div class="container">
+      <nav class="nav">
+        <a class="brand" href="#home">
+          <div class="logo">V</div>
+          <span>VINaris</span>
+        </a>
+        
+        <div class="menu">
+          <a href="#features">ფუნქციები</a>
+          <a href="#pricing">ფასები</a>
+          <a href="#how-it-works">პროცესი</a>
+          <a href="#faq">კითხვები</a>
+          <a href="#contact">კონტაქტი</a>
+          <a href="Login/login.html" class="btn ghost" style="padding: 0.6rem 1rem;">შესვლა</a>
+          <a href="Login/register.html" class="btn" style="padding: 0.6rem 1rem;">დაწყება</a>
+        </div>
+
+        <button class="mobile-menu-btn" id="mobile-menu-btn">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="#features">ფუნქციები</a>
+    <a href="#pricing">ფასები</a>
+    <a href="#how-it-works">პროცესი</a>
+    <a href="#faq">კითხვები</a>
+    <a href="#contact">კონტაქტი</a>
+    <a href="Login/login.html" class="btn ghost">შესვლა</a>
+    <a href="Login/register.html" class="btn">დაწყება</a>
+  </div>
+
+  <!-- Hero Section -->
+  <section id="home" class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="animate-fade-in">
+          <h1>პროფესიონალური VIN ისტორიის ანგარიშები</h1>
+          <p class="lead">მიიღეთ სრული ავტომობილის ისტორიის ანგარიშები <strong>Carfax</strong> და <strong>AutoCheck</strong> ინტეგრაციით. მიიღეთ ინფორმირებული გადაწყვეტილებები დეტალური ავარიის ისტორიით, აუქციონის ფოტოებით და ბაზრის ანალიზით.</p>
+          
+          <div class="vin-checker">
+            <div class="vin-input-group">
+              <input 
+                id="vin-input" 
+                class="vin-input" 
+                type="text" 
+                maxlength="17" 
+                placeholder="შეიყვანეთ 17-ნიშნა VIN (მაგ., 1HGCM82633A004352)"
+                aria-label="ავტომობილის იდენტიფიკაციის ნომერი"
+              >
+              <button class="btn" id="check-vin-btn">
+                <span>ანგარიშის მიღება</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="features-badges">
+            <div class="badge">
+              <span>⚡</span>
+              <span>მყისიერი შედეგები</span>
+            </div>
+            <div class="badge">
+              <span>🔒</span>
+              <span>უსაფრთხო და კონფიდენციალური</span>
+            </div>
+            <div class="badge">
+              <span>📱</span>
+              <span>მობილური ვერსია</span>
+            </div>
+          </div>
+
+          <div class="partners">
+            <div class="partner-logo">CARFAX</div>
+            <div class="partner-logo">AutoCheck</div>
+            <div class="partner-logo">NMVTIS</div>
+            <div class="partner-logo">Insurance Data</div>
+          </div>
+        </div>
+
+        <div class="hero-card animate-fade-in">
+          <h3>სრული ავტომობილის ანგარიშები</h3>
+          <p>ყველაფერი, რაც უნდა იცოდეთ ავტომობილის ისტორიის შესახებ ერთ დეტალურ ანგარიშში.</p>
+          
+          <div class="features-grid">
+            <div class="feature-item">
+              <div class="feature-num">1</div>
+              <h4>VIN დეკოდირება</h4>
+              <p>სრული ტექნიკური მახასიათებლები და კომპლექტაციის ინფორმაცია მრავალი ბაზიდან.</p>
+            </div>
+            
+            <div class="feature-item">
+              <div class="feature-num">2</div>
+              <h4>ავარიის ისტორია</h4>
+              <p>დეტალური ავარიის ჩანაწერები ზიანის შეფასებით და შეკეთების ღირებულებით.</p>
+            </div>
+            
+            <div class="feature-item">
+              <div class="feature-num">3</div>
+              <h4>აუქციონის ფოტოები</h4>
+              <p>მაღალი ხარისხის ფოტოები დაზღვევის აუქციონებიდან, რომლებიც აჩვენებს ავტომობილის რეალურ მდგომარეობას.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features">
+    <div class="container">
+      <div class="section-header">
+        <h2>რატომ აირჩიოთ VINaris?</h2>
+        <p>ჩვენ ვაწარმოებთ ყველაზე სრულ და ზუსტ ავტომობილის ისტორიის ანგარიშებს ინდუსტრიაში</p>
+      </div>
+
+      <div class="pricing-grid">
+        <div class="feature-item">
+          <div class="feature-num">📊</div>
+          <h4>მრავალი მონაცემთა წყარო</h4>
+          <p>ჩვენ ვაგრეგირებთ მონაცემებს Carfax, AutoCheck, NMVTIS და დაზღვევის ბაზებიდან, რომ მოგცეთ სრული სურათი.</p>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-num">🔍</div>
+          <h4>დეტალური ანალიზი</h4>
+          <p>ჩვენი ანგარიშები მოიცავს ბაზრის ღირებულების ანალიზს, მფლობელობის ისტორიას, სერვისის ჩანაწერებს და შესაძლო პრობლემებს.</p>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-num">⚡</div>
+          <h4>მყისიერი მიწოდება</h4>
+          <p>მიიღეთ თქვენი ანგარიში წუთების განმავლობაში. ლოდინი არ არის - მხოლოდ სწრაფი და ზუსტი შედეგები.</p>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-num">📸</div>
+          <h4>აუქციონის ფოტოები</h4>
+          <p>წვდომა მაღალი ხარისხის ფოტოებზე დაზღვევის აუქციონებიდან, რომლებიც აჩვენებს ავტომობილის რეალურ ზიანს და მდგომარეობას.</p>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-num">💰</div>
+          <h4>საუკეთესო ღირებულება</h4>
+          <p>მიიღეთ პრემიუმ ანგარიშები ღირებულების ნაწილზე. არ არის გამოწერები - გადაიხადეთ მხოლოდ იმისთვის, რაც გჭირდებათ.</p>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-num">🏆</div>
+          <h4>ექსპერტული მხარდაჭერა</h4>
+          <p>ჩვენი ავტომობილების ექსპერტების გუნდი მზადაა დაგეხმაროთ ანგარიშის გაგებაში და სწორი გადაწყვეტილების მიღებაში.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing Section -->
+  <section id="pricing">
+    <div class="container">
+      <div class="section-header">
+        <h2>მარტივი, გამჭვირვალე ფასები</h2>
+        <p>აირჩიეთ ის გეგმა, რომელიც ყველაზე კარგად მოგწონთ. არ არის ფარული საფასური, არ არის გამოწერები.</p>
+      </div>
+
+      <div class="pricing-grid">
+        <div class="price-card">
+          <h3 class="text-muted">ძირითადი ანგარიში</h3>
+          <div class="price">$9.99 <small>VIN-ზე</small></div>
+          <ul class="price-features">
+            <li>VIN დეკოდირება და მახასიათებლები</li>
+            <li>ძირითადი ისტორიის შემოწმება</li>
+            <li>სათაურო ინფორმაცია</li>
+            <li>ოდომეტრის ჩანაწერები</li>
+            <li class="unavailable">აუქციონის ფოტოები</li>
+            <li class="unavailable">დეტალური ზიანის ანგარიშები</li>
+          </ul>
+          <button class="btn secondary" data-plan="basic">ძირითადის არჩევა</button>
+        </div>
+
+        <div class="price-card popular">
+          <div class="popular-badge">ყველაზე პოპულარული</div>
+          <h3 class="text-muted">პრემიუმ ანგარიში</h3>
+          <div class="price">$24.99 <small>VIN-ზე</small></div>
+          <ul class="price-features">
+            <li>ყველაფერი ძირითადში</li>
+            <li>Carfax/AutoCheck ინტეგრაცია</li>
+            <li>ავარიის ისტორია და ზიანის დეტალები</li>
+            <li>აუქციონის ფოტოები (თუ ხელმისაწვდომია)</li>
+            <li>ბაზრის ღირებულების ანალიზი</li>
+            <li>სერვისისა და მოვლის ჩანაწერები</li>
+            <li>პრიორიტეტული მხარდაჭერა</li>
+          </ul>
+          <button class="btn" data-plan="premium">პრემიუმის მიღება</button>
+        </div>
+
+        <div class="price-card">
+          <h3 class="text-muted">ბიზნეს პაკეტი</h3>
+          <div class="price">$199 <small>/ 10 VIN</small></div>
+          <ul class="price-features">
+            <li>ყველაფერი პრემიუმში</li>
+            <li>მასობრივი დამუშავება</li>
+            <li>API წვდომა</li>
+            <li>ინდივიდუალური ბრენდინგი</li>
+            <li>დედიკირებული ანგარიშის მენეჯერი</li>
+            <li>პრიორიტეტული დამუშავება</li>
+            <li>მოცულობის ფასდაკლებები</li>
+          </ul>
+          <button class="btn secondary" data-plan="business">გაყიდვების კონტაქტი</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works Section -->
+  <section id="how-it-works">
+    <div class="container">
+      <div class="section-header">
+        <h2>როგორ მუშაობს</h2>
+        <p>მიიღეთ თქვენი ავტომობილის ისტორიის ანგარიში სამ მარტივ ნაბიჯში</p>
+      </div>
+
+      <div class="steps-grid">
+        <div class="step">
+          <div class="step-num">1</div>
+          <h3>VIN-ის შეყვანა</h3>
+          <p>უბრალოდ შეიყვანეთ 17-ნიშნა VIN ნომერი. ჩვენი სისტემა მყისიერად შეამოწმებს და დეკოდირებს მას.</p>
+        </div>
+
+        <div class="step">
+          <div class="step-num">2</div>
+          <h3>ანგარიშის ტიპის არჩევა</h3>
+          <p>აირჩიეთ ანგარიშის დონე, რომელიც აკმაყოფილებს თქვენს საჭიროებებს - ძირითადი ინფორმაციიდან სრულ ანალიზამდე.</p>
+        </div>
+
+        <div class="step">
+          <div class="step-num">3</div>
+          <h3>მყისიერი შედეგების მიღება</h3>
+          <p>მიიღეთ თქვენი დეტალური ანგარიში მყისიერად ელფოსტით და თქვენს დაფაზე. ჩამოტვირთეთ PDF ნებისმიერ დროს.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section id="faq">
+    <div class="container">
+      <div class="section-header">
+        <h2>ხშირად დასმული კითხვები</h2>
+        <p>იპოვეთ პასუხები ჩვენი VIN შემოწმების სერვისის შესახებ ხშირ კითხვებზე</p>
+      </div>
+
+      <div class="faq-container">
+        <details>
+          <summary>რა არის VIN და სად ვიპოვო ის?</summary>
+          <p>VIN (ავტომობილის იდენტიფიკაციის ნომერი) არის უნიკალური 17-ნიშნა კოდი, რომელიც იდენტიფიცირებს თქვენს ავტომობილს. ჩვეულებრივ შეგიძლიათ იპოვოთ ის დაფაზე (ხილულია ქარის ფანჯრის მეშვეობით მარცხენა მხრიდან), მარცხენა კარის ჩარჩოზე, ან ავტომობილის სათაურო და რეგისტრაციის დოკუმენტებში.</p>
+        </details>
+
+        <details>
+          <summary>რამდენად ზუსტია თქვენი ანგარიშები?</summary>
+          <p>ჩვენი ანგარიშები ძალიან ზუსტია, რადგან ვიღებთ მონაცემებს მრავალი ოფიციალური ბაზიდან, მათ შორის Carfax, AutoCheck, NMVTIS და დაზღვევის კომპანიებიდან. თუმცა, ანგარიშის სისრულე დამოკიდებულია იმაზე, რა მონაცემებია ხელმისაწვდომი კონკრეტული ავტომობილისთვის.</p>
+        </details>
+
+        <details>
+          <summary>შემიძლია აუქციონის ფოტოების მიღება ნებისმიერი ავტომობილისთვის?</summary>
+          <p>აუქციონის ფოტოები ხელმისაწვდომია იმ ავტომობილებისთვის, რომლებიც გაიარეს დაზღვევის აუქციონებზე. მიუხედავად იმისა, რომ ჩვენ გვაქვს წვდომა აუქციონის ფოტოების დიდ ბაზაზე, ისინი შეიძლება არ იყოს ხელმისაწვდომი ყველა ავტომობილისთვის, განსაკუთრებით იმათთვის, რომლებიც არ იყვნენ ავარიებში ან დაზღვევის პრეტენზიებში.</p>
+        </details>
+
+        <details>
+          <summary>რა განსხვავებაა Carfax-სა და AutoCheck-ს შორის?</summary>
+          <p>Carfax-იც და AutoCheck-იც არიან ავტომობილის ისტორიის მომწოდებლები, მაგრამ მათ შეიძლება ჰქონდეთ განსხვავებული მონაცემთა წყაროები და დაფარვა. Carfax ზოგადად უფრო სრულყოფილია ავარიის ისტორიისთვის, ხოლო AutoCheck აღწევს აუქციონის მონაცემებში. ჩვენი პრემიუმ ანგარიშები მოიცავს მონაცემებს ორივე წყაროდან, როცა ხელმისაწვდომია.</p>
+        </details>
+
+        <details>
+          <summary>გთავაზობთ თუ არა ფულის დაბრუნებას?</summary>
+          <p>ჩვენ გთავაზობთ კმაყოფილების გარანტიას. თუ ჩვენი ანგარიში არ იძლევა იმ ინფორმაციას, რომელსაც ელოდებოდით, ან თუ არის ტექნიკური პრობლემა, რომელიც ხელს უშლის ანგარიშზე წვდომას, ჩვენ მოგცემთ სრულ ფულის დაბრუნებას 30 დღის განმავლობაში.</p>
+        </details>
+
+        <details>
+          <summary>უსაფრთხოა თუ არა ჩემი ინფორმაცია?</summary>
+          <p>აბსოლუტურად. ჩვენ ვიყენებთ ინდუსტრიის სტანდარტულ დაშიფვრას ყველა მონაცემის გადაცემისა და შენახვის დასაცავად. ჩვენ არასდროს ვუზიარებთ თქვენს პირად ინფორმაციას მესამე მხარეს, და ყველა VIN ძებნა სრულიად კონფიდენციალურია.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact">
+    <div class="container">
+      <div class="section-header">
+        <h2>დაგვიკავშირდით</h2>
+        <p>გაქვთ კითხვები? გჭირდებათ დახმარება ანგარიშთან? ჩვენ აქ ვართ დასახმარებლად.</p>
+      </div>
+
+      <div class="contact-grid">
+        <form id="contact-form" class="animate-fade-in">
+          <div class="form-group">
+            <label for="name">სრული სახელი *</label>
+            <input type="text" id="name" name="name" class="form-control" required>
+          </div>
+
+          <div class="form-group">
+            <label for="email">ელფოსტის მისამართი *</label>
+            <input type="email" id="email" name="email" class="form-control" required>
+          </div>
+
+          <div class="form-group">
+            <label for="subject">თემა</label>
+            <input type="text" id="subject" name="subject" class="form-control" placeholder="როგორ შეგვიძლია დაგეხმაროთ?">
+          </div>
+
+          <div class="form-group">
+            <label for="message">შეტყობინება *</label>
+            <textarea id="message" name="message" rows="6" class="form-control" required placeholder="მოგვიყვითეთ თქვენს კითხვაზე ან შეშფოთებაზე..."></textarea>
+          </div>
+
+          <button type="submit" class="btn" id="contact-submit">
+            <span>შეტყობინების გაგზავნა</span>
+          </button>
+        </form>
+
+        <div class="contact-info animate-fade-in">
+          <h3>კონტაქტის ინფორმაცია</h3>
+          
+          <div class="contact-item">
+            <h4>სამუშაო საათები</h4>
+            <p>ორშაბათი - პარასკევი: 9:00 - 18:00 (EST)<br>
+               შაბათი: 10:00 - 16:00 (EST)<br>
+               კვირა: დახურული</p>
+          </div>
+
+          <div class="contact-item">
+            <h4>პასუხის დრო</h4>
+            <p>ელფოსტა: 2-4 საათის განმავლობაში<br>
+               ცოცხალი ჩეთი: მყისიერად<br>
+               ტელეფონი: მყისიერად</p>
+          </div>
+
+          <div class="contact-item">
+            <h4>მხარდაჭერის არხები</h4>
+            <p>📧 support@vinaris.com<br>
+               📱 ცოცხალი ჩეთი (ქვედა მარჯვენა)<br>
+               📞 +1 (555) 123-4567</p>
+          </div>
+
+          <div class="contact-item">
+            <h4>ბიზნეს მისამართი</h4>
+            <p>VINaris, LLC<br>
+               123 Business Ave, Suite 100<br>
+               Atlanta, GA 30309</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <div class="logo">V</div>
+          <span>VINaris</span>
+        </div>
+
+        <div class="footer-links">
+          <a href="#pricing">ფასები</a>
+          <a href="#faq">კითხვები</a>
+          <a href="#contact">მხარდაჭერა</a>
+          <a href="privacy.html">კონფიდენციალურობის პოლიტიკა</a>
+          <a href="terms.html">მომსახურების პირობები</a>
+        </div>
+
+        <div class="footer-copy">
+          © <span id="current-year"></span> VINaris. ყველა უფლება დაცულია.
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Initialize current year
+    document.getElementById('current-year').textContent = new Date().getFullYear();
+
+    // Header scroll effect
+    const header = document.getElementById('header');
+    let lastScrollY = window.scrollY;
+
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 100) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    let isMenuOpen = false;
+
+    mobileMenuBtn.addEventListener('click', () => {
+      isMenuOpen = !isMenuOpen;
+      mobileMenu.classList.toggle('active');
+      
+      // Animate hamburger menu
+      const spans = mobileMenuBtn.querySelectorAll('span');
+      if (isMenuOpen) {
+        spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+        spans[1].style.opacity = '0';
+        spans[2].style.transform = 'rotate(-45deg) translate(7px, -6px)';
+      } else {
+        spans.forEach(span => {
+          span.style.transform = '';
+          span.style.opacity = '';
+        });
+      }
+    });
+
+    // Close mobile menu when clicking a link
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.remove('active');
+        isMenuOpen = false;
+        const spans = mobileMenuBtn.querySelectorAll('span');
+        spans.forEach(span => {
+          span.style.transform = '';
+          span.style.opacity = '';
+        });
+      });
+    });
+
+    // Enhanced VIN input handling
+    const vinInput = document.getElementById('vin-input');
+    const checkVinBtn = document.getElementById('check-vin-btn');
+
+    // VIN validation and formatting
+    vinInput.addEventListener('input', (e) => {
+      let value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+      if (value.length > 17) value = value.substring(0, 17);
+      e.target.value = value;
+
+      // Update button state
+      if (value.length === 17) {
+        checkVinBtn.disabled = false;
+        checkVinBtn.style.opacity = '1';
+      } else {
+        checkVinBtn.disabled = true;
+        checkVinBtn.style.opacity = '0.7';
+      }
+    });
+
+    // VIN check functionality
+    checkVinBtn.addEventListener('click', async () => {
+      const vin = vinInput.value.trim();
+      
+      if (vin.length !== 17) {
+        showToast('გთხოვთ შეიყვანოთ სწორი 17-ნიშნა VIN', 'error');
+        return;
+      }
+
+      // Show loading state
+      const originalContent = checkVinBtn.innerHTML;
+      checkVinBtn.innerHTML = '<div class="loading"><div class="loading-spinner"></div><span>Processing...</span></div>';
+      checkVinBtn.disabled = true;
+
+      try {
+        // Simulate VIN validation
+        await new Promise(resolve => setTimeout(resolve, 2000));
+
+        // Check if user is logged in (integrate with your auth system)
+        if (!EnhancedAuth?.isLoggedIn()) {
+          showToast('გთხოვთ შეხვიდეთ სისტემაში გასაგრძელებლად', 'warning');
+          setTimeout(() => {
+            window.location.href = 'Login/login.html?vin=' + encodeURIComponent(vin);
+          }, 1500);
+          return;
+        }
+
+        // Redirect to user panel or payment
+        showToast('VIN წარმატებით შემოწმდა! გადამისამართება...', 'success');
+        setTimeout(() => {
+          window.location.href = 'Userpanel/enhanced-user-panel.html?vin=' + encodeURIComponent(vin);
+        }, 1500);
+
+      } catch (error) {
+        showToast('VIN-ის დამუშავების შეცდომა. გთხოვთ სცადოთ კვლავ.', 'error');
+      } finally {
+        checkVinBtn.innerHTML = originalContent;
+        checkVinBtn.disabled = false;
+      }
+    });
+
+    // Pricing plan selection
+    document.querySelectorAll('[data-plan]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const plan = btn.dataset.plan;
+        
+        if (plan === 'business') {
+          // Scroll to contact section
+          document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+          return;
+        }
+
+        // Check if user is logged in
+        if (!EnhancedAuth?.isLoggedIn()) {
+          showToast('გთხოვთ შეხვიდეთ სისტემაში გეგმის ასარჩევად', 'warning');
+          setTimeout(() => {
+            window.location.href = 'Login/login.html?plan=' + plan;
+          }, 1500);
+          return;
+        }
+
+        // Redirect to user panel with selected plan
+        window.location.href = 'Userpanel/enhanced-user-panel.html?plan=' + plan;
+      });
+    });
+
+    // Contact form handling
+    const contactForm = document.getElementById('contact-form');
+    const contactSubmit = document.getElementById('contact-submit');
+
+    contactForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const formData = new FormData(contactForm);
+      const data = {
+        name: formData.get('name'),
+        email: formData.get('email'),
+        subject: formData.get('subject'),
+        message: formData.get('message')
+      };
+
+      // Show loading state
+      const originalContent = contactSubmit.innerHTML;
+      contactSubmit.innerHTML = '<div class="loading"><div class="loading-spinner"></div><span>Sending...</span></div>';
+      contactSubmit.disabled = true;
+
+      try {
+        // Simulate form submission
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        
+        showToast('შეტყობინება წარმატებით გაიგზავნა! მალე დაგიკავშირდებით.', 'success');
+        contactForm.reset();
+        
+      } catch (error) {
+        showToast('შეტყობინების გაგზავნის შეცდომა. გთხოვთ სცადოთ კვლავ.', 'error');
+      } finally {
+        contactSubmit.innerHTML = originalContent;
+        contactSubmit.disabled = false;
+      }
+    });
+
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+      link.addEventListener('click', (e) => {
+        const href = link.getAttribute('href');
+        if (href.length > 1) {
+          e.preventDefault();
+          const target = document.querySelector(href);
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }
+      });
+    });
+
+    // Toast notification system
+    function showToast(message, type = 'info') {
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <span>${getToastIcon(type)}</span>
+          <span>${message}</span>
+        </div>
+      `;
+      
+      document.body.appendChild(toast);
+      
+      // Trigger animation
+      setTimeout(() => toast.classList.add('show'), 100);
+      
+      // Remove after 4 seconds
+      setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
+    }
+
+    function getToastIcon(type) {
+      const icons = {
+        success: '✅',
+        error: '❌',
+        warning: '⚠️',
+        info: 'ℹ️'
+      };
+      return icons[type] || icons.info;
+    }
+
+    // Update navigation based on user state
+    function updateNavigation() {
+      console.log('updateNavigation called');
+      const signInBtn = document.querySelector('a[href*="login"]');
+      const getStartedBtn = document.querySelector('a[href*="register"]');
+
+      if (!signInBtn || !getStartedBtn) {
+        console.log('Navigation buttons not found');
+        return;
+      }
+
+      console.log('EnhancedAuth available:', typeof EnhancedAuth !== 'undefined');
+
+      // AGGRESSIVE: Clear any cached data first
+      const keysToRemove = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && (key.includes('vinaris') || key.includes('user') || key.includes('auth'))) {
+          keysToRemove.push(key);
+        }
+      }
+      keysToRemove.forEach(key => {
+        console.log('Clearing cached key:', key);
+        localStorage.removeItem(key);
+      });
+
+      // Check both EnhancedAuth and localStorage for user data
+      let user = null;
+      let isLoggedIn = false;
+
+      if (typeof EnhancedAuth !== 'undefined') {
+        isLoggedIn = EnhancedAuth.isLoggedIn();
+        if (isLoggedIn) {
+          user = EnhancedAuth.getCurrentUser();
+        }
+      }
+
+      // Also check localStorage directly as a fallback
+      if (!user) {
+        try {
+          const localUser = localStorage.getItem('vinaris_user');
+          if (localUser) {
+            user = JSON.parse(localUser);
+            isLoggedIn = true;
+            console.log('Found user in localStorage:', user);
+          }
+        } catch (error) {
+          console.log('Error parsing localStorage user:', error);
+          // Clear corrupted data
+          localStorage.removeItem('vinaris_user');
+        }
+      }
+
+      // Additional check: if user exists but no valid session, clear it
+      if (user && typeof EnhancedAuth !== 'undefined' && !EnhancedAuth.isLoggedIn()) {
+        console.log('User exists but no valid session, clearing user data');
+        user = null;
+        isLoggedIn = false;
+        localStorage.removeItem('vinaris_user');
+      }
+
+      console.log('isLoggedIn:', isLoggedIn);
+      console.log('Current user:', user);
+
+      if (isLoggedIn && user && user.name) {
+        // User is logged in - show user info
+        console.log('Showing user info for:', user.name);
+        signInBtn.innerHTML = `👤 ${user.name}`;
+        signInBtn.href = user.type === 'admin' ? 'Adminpanel/enhanced-admin-panel-fixed.html' : 'Userpanel/enhanced-user-panel.html';
+        getStartedBtn.style.display = 'none';
+      } else {
+        // No valid user - reset to login state
+        console.log('No valid user, resetting to login state');
+        resetToLoginState();
+      }
+
+      function resetToLoginState() {
+        console.log('Resetting to login state');
+        signInBtn.innerHTML = 'შესვლა';
+        signInBtn.href = 'Login/login.html';
+        getStartedBtn.style.display = 'inline-block';
+      }
+    }
+
+    // Initialize animations on scroll
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-fade-in');
+        }
+      });
+    }, observerOptions);
+
+    // Observe elements for animation
+    document.querySelectorAll('.feature-item, .price-card, .step').forEach(el => {
+      observer.observe(el);
+    });
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('index.html DOMContentLoaded called');
+      
+      // IMMEDIATE nuclear clear on page load to prevent cached data issues
+      console.log('Performing nuclear clear on page load...');
+      nuclearClear();
+      
+      // Multiple attempts to update navigation
+      const updateNavigationWithRetry = (attempt = 1) => {
+        console.log(`updateNavigation attempt ${attempt}`);
+        
+        if (typeof EnhancedAuth !== 'undefined') {
+          console.log('EnhancedAuth is available, calling updateNavigation');
+          updateNavigation();
+        } else if (attempt < 10) {
+          console.log('EnhancedAuth not available, retrying in 200ms');
+          setTimeout(() => updateNavigationWithRetry(attempt + 1), 200);
+        } else {
+          console.log('EnhancedAuth not available after 10 attempts, calling updateNavigation anyway');
+          updateNavigation();
+        }
+      };
+      
+      // Start the retry process
+      updateNavigationWithRetry();
+      
+      // Set initial VIN button state
+      checkVinBtn.disabled = true;
+      checkVinBtn.style.opacity = '0.7';
+    });
+
+    // Also update navigation when page becomes visible (e.g., returning from logout)
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) {
+        updateNavigation();
+      }
+    });
+
+    // Update navigation when window gains focus (e.g., returning from another tab)
+    window.addEventListener('focus', () => {
+      updateNavigation();
+    });
+
+    // Manual logout function for debugging
+    async function forceLogout() {
+      console.log('Force logout called');
+      
+      try {
+        // Call API logout first
+        const response = await fetch('api.php/auth/logout', {
+          method: 'POST',
+          credentials: 'include'
+        });
+        console.log('API logout response:', response.status);
+      } catch (error) {
+        console.log('API logout failed:', error);
+      }
+      
+      // Clear EnhancedAuth session
+      if (typeof EnhancedAuth !== 'undefined') {
+        if (typeof TokenManager !== 'undefined') {
+          TokenManager.clearToken();
+        }
+      }
+      
+      // Nuclear option - clear everything
+      localStorage.clear();
+      sessionStorage.clear();
+      
+      // Clear any possible cached data
+      const keysToRemove = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && (key.includes('vinaris') || key.includes('user') || key.includes('auth'))) {
+          keysToRemove.push(key);
+        }
+      }
+      keysToRemove.forEach(key => localStorage.removeItem(key));
+      
+      // Force clear any cached user data
+      if (typeof EnhancedAuth !== 'undefined' && EnhancedAuth.getCurrentUser) {
+        // This should return null after clearing
+        const user = EnhancedAuth.getCurrentUser();
+        console.log('User after logout:', user);
+      }
+      
+      // Force reload the page to clear any cached state
+      console.log('Reloading page to clear cached state...');
+      window.location.reload();
+    }
+    
+    // Nuclear clear function
+    function nuclearClear() {
+      console.log('Nuclear clear called');
+      
+      // Clear everything
+      localStorage.clear();
+      sessionStorage.clear();
+      
+      // Clear any possible cached data
+      const keysToRemove = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && (key.includes('vinaris') || key.includes('user') || key.includes('auth'))) {
+          keysToRemove.push(key);
+        }
+      }
+      keysToRemove.forEach(key => localStorage.removeItem(key));
+      
+      // Clear EnhancedAuth
+      if (typeof EnhancedAuth !== 'undefined' && typeof TokenManager !== 'undefined') {
+        TokenManager.clearToken();
+      }
+      
+      // Force clear any cached user data in EnhancedAuth
+      if (typeof EnhancedAuth !== 'undefined' && EnhancedAuth.getCurrentUser) {
+        // This should return null after clearing
+        const user = EnhancedAuth.getCurrentUser();
+        console.log('User after nuclear clear:', user);
+      }
+      
+      // Update navigation
+      updateNavigation();
+      
+      console.log('Nuclear clear completed');
+    }
+
+    // Make it globally available for debugging
+    window.forceLogout = forceLogout;
+    window.nuclearClear = nuclearClear;
+    
+    // Override initializePage to ensure navigation is updated
+    window.initializePage = function() {
+      console.log('initializePage called by xampp-api-utils.js');
+      updateNavigation();
+    };
+
+    // Enhanced keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      // ESC to close mobile menu
+      if (e.key === 'Escape' && isMenuOpen) {
+        mobileMenu.classList.remove('active');
+        isMenuOpen = false;
+        const spans = mobileMenuBtn.querySelectorAll('span');
+        spans.forEach(span => {
+          span.style.transform = '';
+          span.style.opacity = '';
+        });
+      }
+      
+      // Enter to submit VIN
+      if (e.key === 'Enter' && document.activeElement === vinInput && vinInput.value.length === 17) {
+        checkVinBtn.click();
+      }
+    });
+  </script>
+</body>
+</html>

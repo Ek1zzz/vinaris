@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>მომსახურების პირობები - VINaris</title>
+  <meta name="description" content="VINaris მომსახურების პირობები და წესები" />
+  <link rel="canonical" href="https://vinaris.ge/terms" />
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ctext y='18' font-size='18'%3EV%3C/text%3E%3C/svg%3E">
+  
+  <style>
+    :root {
+      --bg: #0a0a0c;
+      --bg-soft: #111114;
+      --card: #16161b;
+      --card-hover: #1a1a20;
+      --text: #f0f0f4;
+      --muted: #9999a8;
+      --primary: #e60000;
+      --primary-hover: #cc0000;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --border: #2a2a30;
+      --border-light: #34343c;
+      --shadow: 0 20px 40px rgba(0,0,0,0.4);
+      --shadow-lg: 0 30px 60px rgba(0,0,0,0.5);
+      --radius: 16px;
+      --radius-lg: 24px;
+      --gradient-primary: linear-gradient(135deg, #e60000, #b30000);
+      --gradient-card: linear-gradient(145deg, #16161b, #14141a);
+      --backdrop: saturate(180%) blur(20px);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: 
+        radial-gradient(1400px 800px at 90% -20%, rgba(230, 0, 0, 0.08), transparent 70%),
+        radial-gradient(800px 600px at 10% 120%, rgba(34, 197, 94, 0.04), transparent 50%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Typography */
+    h1, h2, h3, h4, h5, h6 {
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    /* Layout */
+    .container {
+      width: min(1200px, 92%);
+      margin-inline: auto;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 1rem 1.5rem;
+      border-radius: var(--radius);
+      background: var(--gradient-primary);
+      color: white;
+      font-weight: 600;
+      font-size: 0.95rem;
+      border: none;
+      cursor: pointer;
+      box-shadow: 
+        0 4px 12px rgba(230, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn.ghost {
+      background: var(--gradient-card);
+      border: 1px solid var(--border-light);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      color: var(--text);
+    }
+
+    .btn.ghost:hover {
+      background: var(--card-hover);
+      border-color: var(--primary);
+    }
+
+    /* Header */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      backdrop-filter: var(--backdrop);
+      background: rgba(10, 10, 12, 0.8);
+      border-bottom: 1px solid var(--border);
+      transition: all 0.3s ease;
+    }
+
+    header.scrolled {
+      background: rgba(10, 10, 12, 0.95);
+      border-bottom-color: var(--border-light);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 0;
+      transition: padding 0.3s ease;
+    }
+
+    header.scrolled .nav {
+      padding: 0.75rem 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 1.25rem;
+      font-weight: 800;
+      z-index: 1001;
+    }
+
+    .logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: var(--gradient-primary);
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      color: white;
+      box-shadow: 
+        0 4px 12px rgba(230, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .logo:hover {
+      transform: rotate(5deg) scale(1.05);
+    }
+
+    .menu {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .menu a {
+      color: var(--muted);
+      font-weight: 500;
+      position: relative;
+      transition: color 0.2s ease;
+    }
+
+    .menu a:hover {
+      color: var(--text);
+    }
+
+    .menu a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--primary);
+      transition: width 0.2s ease;
+    }
+
+    .menu a:hover::after {
+      width: 100%;
+    }
+
+    /* Mobile menu */
+    .mobile-menu-btn {
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .mobile-menu-btn span {
+      width: 24px;
+      height: 2px;
+      background: var(--text);
+      transition: all 0.3s ease;
+    }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(10, 10, 12, 0.98);
+      backdrop-filter: var(--backdrop);
+      z-index: 999;
+      padding: 6rem 2rem 2rem;
+    }
+
+    .mobile-menu.active {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .mobile-menu a {
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+    /* Main Content */
+    .main-content {
+      padding: 8rem 0 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .main-content::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 20% 50%, rgba(230, 0, 0, 0.1), transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(34, 197, 94, 0.08), transparent 40%);
+      pointer-events: none;
+    }
+
+    .content-wrapper {
+      position: relative;
+      z-index: 2;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .page-header h1 {
+      font-size: clamp(2.5rem, 5vw, 3.5rem);
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, var(--text), var(--muted));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .page-header p {
+      font-size: 1.2rem;
+      color: var(--muted);
+      margin-bottom: 2rem;
+      line-height: 1.5;
+    }
+
+    .content {
+      background: var(--gradient-card);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: 3rem;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .content::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--primary), transparent);
+    }
+
+    .content h2 {
+      color: var(--primary);
+      margin: 2.5rem 0 1.5rem 0;
+      font-size: 1.8rem;
+      font-weight: 700;
+      position: relative;
+    }
+
+    .content h2:first-child {
+      margin-top: 0;
+    }
+
+    .content h2::before {
+      content: '';
+      position: absolute;
+      left: -1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 4px;
+      height: 24px;
+      background: var(--gradient-primary);
+      border-radius: 2px;
+    }
+
+    .content h3 {
+      color: var(--text);
+      margin: 2rem 0 1rem 0;
+      font-size: 1.3rem;
+      font-weight: 600;
+    }
+
+    .content p {
+      margin-bottom: 1.5rem;
+      color: var(--muted);
+      font-size: 1.05rem;
+      line-height: 1.7;
+    }
+
+    .content ul {
+      margin: 1.5rem 0;
+      padding-left: 2rem;
+    }
+
+    .content li {
+      margin-bottom: 0.8rem;
+      color: var(--muted);
+      position: relative;
+    }
+
+    .content li::marker {
+      color: var(--primary);
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      color: var(--primary);
+      text-decoration: none;
+      margin-bottom: 2rem;
+      padding: 0.75rem 1.5rem;
+      background: rgba(230, 0, 0, 0.1);
+      border: 1px solid rgba(230, 0, 0, 0.2);
+      border-radius: var(--radius);
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
+
+    .back-link:hover {
+      background: rgba(230, 0, 0, 0.15);
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(230, 0, 0, 0.2);
+    }
+
+    .last-updated {
+      text-align: center;
+      margin-top: 3rem;
+      padding: 1.5rem;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.95rem;
+      background: rgba(22, 22, 27, 0.5);
+      border-radius: var(--radius);
+    }
+
+    .highlight {
+      background: rgba(230, 0, 0, 0.08);
+      border: 1px solid rgba(230, 0, 0, 0.2);
+      border-left: 4px solid var(--primary);
+      padding: 1.5rem;
+      margin: 2rem 0;
+      border-radius: var(--radius);
+      position: relative;
+    }
+
+    .highlight::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--primary), transparent);
+    }
+
+    /* Footer */
+    footer {
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      padding: 3rem 0 2rem;
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .footer-links a {
+      color: var(--muted);
+      transition: color 0.2s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--text);
+    }
+
+    .footer-copy {
+      text-align: right;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 968px) {
+      .footer-content {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        text-align: center;
+      }
+
+      .footer-copy {
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .menu {
+        display: none;
+      }
+
+      .mobile-menu-btn {
+        display: flex;
+      }
+
+      .main-content {
+        padding: 6rem 0 3rem;
+      }
+
+      .content {
+        padding: 2rem;
+      }
+
+      .page-header h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header id="header">
+    <div class="container">
+      <nav class="nav">
+        <a class="brand" href="index.html">
+          <div class="logo">V</div>
+          <span>VINaris</span>
+        </a>
+        
+        <div class="menu">
+          <a href="index.html#features">ფუნქციები</a>
+          <a href="index.html#pricing">ფასები</a>
+          <a href="index.html#how-it-works">პროცესი</a>
+          <a href="index.html#faq">კითხვები</a>
+          <a href="index.html#contact">კონტაქტი</a>
+          <a href="Login/login.html" class="btn ghost" style="padding: 0.6rem 1rem;">შესვლა</a>
+          <a href="Login/register.html" class="btn" style="padding: 0.6rem 1rem;">დაწყება</a>
+        </div>
+
+        <button class="mobile-menu-btn" id="mobile-menu-btn">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="index.html#features">ფუნქციები</a>
+    <a href="index.html#pricing">ფასები</a>
+    <a href="index.html#how-it-works">პროცესი</a>
+    <a href="index.html#faq">კითხვები</a>
+    <a href="index.html#contact">კონტაქტი</a>
+    <a href="Login/login.html" class="btn ghost">შესვლა</a>
+    <a href="Login/register.html" class="btn">დაწყება</a>
+  </div>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="container">
+      <div class="content-wrapper">
+        <a href="index.html" class="back-link">
+          ← უკან მთავარ გვერდზე
+        </a>
+        
+        <div class="page-header">
+          <h1>მომსახურების პირობები</h1>
+          <p>VINaris სერვისის გამოყენების წესები და პირობები</p>
+        </div>
+
+        <div class="content">
+          <h2>1. მომსახურების აღწერა</h2>
+          <p>VINaris არის პროფესიონალური VIN შემოწმების სერვისი, რომელიც უზრუნველყოფს ავტომობილის ისტორიის დეტალურ ანგარიშებს. ჩვენი სერვისი მოიცავს:</p>
+          <ul>
+            <li>VIN დეკოდირებას და ტექნიკური მახასიათებლების მიღებას</li>
+            <li>ავარიის ისტორიის შემოწმებას</li>
+            <li>აუქციონის ფოტოების წვდომას</li>
+            <li>ბაზრის ღირებულების ანალიზს</li>
+            <li>სხვა დაკავშირებულ ინფორმაციას</li>
+          </ul>
+
+          <h2>2. მომხმარებლის ვალდებულებები</h2>
+          <p>VINaris სერვისის გამოყენებისას, თქვენ ვალდებულნი ხართ:</p>
+          <ul>
+            <li>შეიყვანოთ მხოლოდ სწორი და ვალიდური VIN ნომრები</li>
+            <li>გამოიყენოთ სერვისი მხოლოდ კანონიერი მიზნებისთვის</li>
+            <li>არ გაავრცელოთ ან გამოიყენოთ მიღებული ინფორმაცია არალეგალური მიზნებისთვის</li>
+            <li>შეინარჩუნოთ თქვენი ანგარიშის უსაფრთხოება</li>
+            <li>გადაიხადოთ ყველა საფასური დროულად</li>
+          </ul>
+
+          <h2>3. გადახდის პირობები</h2>
+          <p>ყველა გადახდა ხდება წინასწარ. ფასები შეიძლება შეიცვალოს ნებისმიერ დროს ყოველგვარი წინასწარი შეტყობინების გარეშე. გადახდის შემდეგ, ანგარიშები ხელმისაწვდომია მყისიერად.</p>
+
+          <h2>4. ფულის დაბრუნება</h2>
+          <p>ჩვენ გთავაზობთ 30-დღიან კმაყოფილების გარანტიას. თუ ჩვენი ანგარიში არ იძლევა იმ ინფორმაციას, რომელსაც ელოდებოდით, ან თუ არის ტექნიკური პრობლემა, ჩვენ მოგცემთ სრულ ფულის დაბრუნებას.</p>
+
+          <h2>5. ინფორმაციის სიზუსტე</h2>
+          <p>ჩვენ ვცდილობთ ვაწარმოოთ ყველაზე ზუსტი ანგარიშები, მაგრამ არ ვიღებთ პასუხისმგებლობას ინფორმაციის სისრულეზე ან სიზუსტეზე. ანგარიშები ეფუძნება მესამე მხარის მონაცემებს, რომლებიც შეიძლება იყოს არასრული ან არაზუსტი.</p>
+
+          <h2>6. კონფიდენციალურობა</h2>
+          <p>ჩვენ ვიცავთ თქვენს კონფიდენციალურობას და არ ვუზიარებთ თქვენს პირად ინფორმაციას მესამე მხარეს. ყველა VIN ძებნა სრულიად კონფიდენციალურია.</p>
+
+          <h2>7. სერვისის შეზღუდვები</h2>
+          <p>ჩვენ ვიტოვებთ უფლებას შევზღუდოთ ან შევწყვიტოთ სერვისი ნებისმიერი მომხმარებლისთვის, რომელიც არღვევს ამ პირობებს.</p>
+
+          <h2>8. პასუხისმგებლობის შეზღუდვა</h2>
+          <p>VINaris არ არის პასუხისმგებელი ნებისმიერი ზიანისთვის, რომელიც შეიძლება წარმოიშვას ჩვენი სერვისის გამოყენების შედეგად.</p>
+
+          <h2>9. პირობების ცვლილება</h2>
+          <p>ჩვენ ვიტოვებთ უფლებას შევცვალოთ ეს პირობები ნებისმიერ დროს. ცვლილებები ძალაში შევა მათი გამოქვეყნებისთანავე.</p>
+
+          <h2>10. კონტაქტი</h2>
+          <p>თუ გაქვთ კითხვები ამ პირობებთან დაკავშირებით, გთხოვთ დაგვიკავშირდეთ:</p>
+          <ul>
+            <li>ელფოსტა: support@vinaris.com</li>
+            <li>ტელეფონი: +1 (555) 123-4567</li>
+          </ul>
+
+          <div class="last-updated">
+            ბოლო განახლება: 2024 წლის 25 დეკემბერი
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <div class="logo">V</div>
+          <span>VINaris</span>
+        </div>
+
+        <div class="footer-links">
+          <a href="index.html#pricing">ფასები</a>
+          <a href="index.html#faq">კითხვები</a>
+          <a href="index.html#contact">მხარდაჭერა</a>
+          <a href="privacy.html">კონფიდენციალურობის პოლიტიკა</a>
+          <a href="terms.html">მომსახურების პირობები</a>
+        </div>
+
+        <div class="footer-copy">
+          © <span id="current-year"></span> VINaris. ყველა უფლება დაცულია.
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Initialize current year
+    document.getElementById('current-year').textContent = new Date().getFullYear();
+
+    // Header scroll effect
+    const header = document.getElementById('header');
+    let lastScrollY = window.scrollY;
+
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 100) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    let isMenuOpen = false;
+
+    mobileMenuBtn.addEventListener('click', () => {
+      isMenuOpen = !isMenuOpen;
+      mobileMenu.classList.toggle('active');
+      
+      // Animate hamburger menu
+      const spans = mobileMenuBtn.querySelectorAll('span');
+      if (isMenuOpen) {
+        spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+        spans[1].style.opacity = '0';
+        spans[2].style.transform = 'rotate(-45deg) translate(7px, -6px)';
+      } else {
+        spans.forEach(span => {
+          span.style.transform = '';
+          span.style.opacity = '';
+        });
+      }
+    });
+
+    // Close mobile menu when clicking a link
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.remove('active');
+        isMenuOpen = false;
+        const spans = mobileMenuBtn.querySelectorAll('span');
+        spans.forEach(span => {
+          span.style.transform = '';
+          span.style.opacity = '';
+        });
+      });
+    });
+
+    // Enhanced keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      // ESC to close mobile menu
+      if (e.key === 'Escape' && isMenuOpen) {
+        mobileMenu.classList.remove('active');
+        isMenuOpen = false;
+        const spans = mobileMenuBtn.querySelectorAll('span');
+        spans.forEach(span => {
+          span.style.transform = '';
+          span.style.opacity = '';
+        });
+      }
+    });
+  </script>
+</body>
+</html>

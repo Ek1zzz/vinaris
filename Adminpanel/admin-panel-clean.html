@@ -1,0 +1,1981 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VINaris Enhanced Admin Panel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg: #0a0a0a;
+            --panel: #1a1a1a;
+            --panel2: #2a2a2a;
+            --border: #333;
+            --text: #ffffff;
+            --muted: #999;
+            --primary: #e60000;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --danger: #ef4444;
+            --radius: 12px;
+            --shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .admin-container {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--panel);
+            border-right: 1px solid var(--border);
+            padding: 20px 0;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
+
+        .sidebar-header h2 {
+            color: var(--primary);
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar-header .admin-info {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 5px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 5px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            color: var(--muted);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: rgba(230, 0, 0, 0.1);
+            color: var(--text);
+            border-left-color: var(--primary);
+        }
+
+        .sidebar-menu .icon {
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-menu .badge {
+            background: var(--primary);
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-left: auto;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: var(--panel);
+            border-bottom: 1px solid var(--border);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 18px;
+            color: var(--text);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        /* Cards and Components */
+        .card {
+            background: var(--panel);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        /* Dashboard Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--panel), var(--panel2));
+            border-radius: var(--radius);
+            padding: 20px;
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--accent, var(--primary));
+        }
+
+        .stat-card.success::before { background: var(--success); }
+        .stat-card.warning::before { background: var(--warning); }
+        .stat-card.info::before { background: var(--info); }
+        .stat-card.danger::before { background: var(--danger); }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-icon {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 20px;
+            opacity: 0.3;
+        }
+
+        /* Tables */
+        .table-container {
+            overflow-x: auto;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--panel);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: var(--panel2);
+            font-weight: 600;
+            color: var(--muted);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        tr:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        /* Status Pills */
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-pill.pending {
+            background: rgba(251, 191, 36, 0.2);
+            color: #fbbf24;
+        }
+
+        .status-pill.processed {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+        }
+
+        .status-pill.rejected {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .status-pill.delivered {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+        }
+
+        .status-pill.active {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 12px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        .btn-info {
+            background: var(--info);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--panel2);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-sm {
+            padding: 4px 8px;
+            font-size: 10px;
+        }
+        
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .status-badge.warning {
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+        }
+        
+        .status-badge.info {
+            background: rgba(13, 202, 240, 0.2);
+            color: #0dcaf0;
+        }
+        
+        .status-badge.success {
+            background: rgba(25, 135, 84, 0.2);
+            color: #198754;
+        }
+        
+        .status-badge.danger {
+            background: rgba(220, 53, 69, 0.2);
+            color: #dc3545;
+        }
+        
+        .status-badge.muted {
+            background: rgba(108, 117, 125, 0.2);
+            color: #6c757d;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        /* Form Controls */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 12px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            background: var(--panel2);
+            color: var(--text);
+            font-size: 14px;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(230, 0, 0, 0.1);
+        }
+
+        /* File Upload */
+        .file-upload {
+            position: relative;
+            display: inline-block;
+        }
+
+        .file-upload input[type="file"] {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-upload-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background: var(--panel2);
+            border: 2px dashed var(--border);
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .file-upload:hover .file-upload-label {
+            border-color: var(--primary);
+            background: rgba(230, 0, 0, 0.1);
+        }
+
+        /* Activity Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            height: 100%;
+            width: 2px;
+            background: var(--border);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 20px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -35px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: 2px solid var(--panel);
+        }
+
+        .timeline-content {
+            background: var(--panel2);
+            padding: 10px 15px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+        }
+
+        .timeline-time {
+            font-size: 11px;
+            color: var(--muted);
+            margin-bottom: 5px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 250px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Load Enhanced Utils -->
+    <script src="../js/xampp-api-utils.js"></script>
+
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-shield-alt"></i> Admin Panel</h2>
+                <div class="admin-info" id="adminInfo">System Administrator</div>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="#" class="menu-item active" data-section="dashboard">
+                    <i class="fas fa-tachometer-alt icon"></i> Dashboard
+                </a></li>
+                <li><a href="#" class="menu-item" data-section="vin-requests">
+                    <i class="fas fa-car icon"></i> VIN Requests
+                    <span class="badge" id="pendingCount">0</span>
+                </a></li>
+                <li><a href="#" class="menu-item" data-section="users">
+                    <i class="fas fa-users icon"></i> Users
+                </a></li>
+                <li><a href="#" class="menu-item" data-section="credits">
+                    <i class="fas fa-coins icon"></i> Credit Management
+                </a></li>
+                <li><a href="#" class="menu-item" data-section="payments">
+                    <i class="fas fa-credit-card icon"></i> Payments
+                </a></li>
+                <li><a href="#" class="menu-item" data-section="activities">
+                    <i class="fas fa-history icon"></i> Activity Log
+                </a></li>
+                <li><a href="#" class="menu-item" data-section="settings">
+                    <i class="fas fa-cog icon"></i> Settings
+                </a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h1 id="sectionTitle">Dashboard</h1>
+                <div class="header-actions">
+                    <button class="btn btn-secondary" id="refreshBtn">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                    <button class="btn btn-primary" onclick="window.location.href='../index.html'">
+                        <i class="fas fa-sign-out-alt"></i> Exit
+                    </button>
+                </div>
+            </div>
+
+            <div class="content" id="mainContent">
+                <!-- Dashboard Section -->
+                <div id="dashboard" class="section">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" id="totalUsers">0</div>
+                            <div class="stat-label">Total Users</div>
+                            <i class="fas fa-users stat-icon"></i>
+                        </div>
+                        <div class="stat-card success">
+                            <div class="stat-value" id="totalRequests">0</div>
+                            <div class="stat-label">Total Requests</div>
+                            <i class="fas fa-car stat-icon"></i>
+                        </div>
+                        <div class="stat-card warning">
+                            <div class="stat-value" id="todayRequests">0</div>
+                            <div class="stat-label">Today's Requests</div>
+                            <i class="fas fa-calendar-day stat-icon"></i>
+                        </div>
+                        <div class="stat-card info">
+                            <div class="stat-value" id="avgProcessingTime">0</div>
+                            <div class="stat-label">Avg Processing (min)</div>
+                            <i class="fas fa-clock stat-icon"></i>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Recent VIN Requests</h3>
+                            <button class="btn btn-primary" onclick="showSection('vin-requests')">
+                                View All Requests
+                            </button>
+                        </div>
+                        <div class="table-container">
+                            <table id="recentRequestsTable">
+                                <thead>
+                                    <tr>
+                                        <th>Request ID</th>
+                                        <th>User</th>
+                                        <th>VIN</th>
+                                        <th>Status</th>
+                                        <th>Created</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Recent Activities</h3>
+                        </div>
+                        <div class="timeline" id="recentActivities"></div>
+                    </div>
+                </div>
+
+                <!-- VIN Requests Section -->
+                <div id="vin-requests" class="section" style="display: none;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">VIN Requests Management</h3>
+                            <div class="header-actions">
+                                <select id="statusFilter" class="form-control" style="width: auto; margin-right: 10px;">
+                                    <option value="">All Status</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="processed">Processed</option>
+                                    <option value="rejected">Rejected</option>
+                                    <option value="delivered">Delivered</option>
+                                </select>
+                                <input type="search" id="searchInput" class="form-control" placeholder="Search VIN or User..." style="width: 200px;">
+                            </div>
+                        </div>
+                        <div class="table-container">
+                            <table id="vinRequestsTable">
+                                <thead>
+                                    <tr>
+                                        <th>Request ID</th>
+                                        <th>User</th>
+                                        <th>VIN</th>
+                                        <th>Plan</th>
+                                        <th>Status</th>
+                                        <th>Created</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Users Section -->
+                <div id="users" class="section" style="display: none;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">User Management</h3>
+                        </div>
+                        <div class="table-container">
+                            <table id="usersTable">
+                                <thead>
+                                    <tr>
+                                        <th>User ID</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Credits</th>
+                                        <th>VIN Checked</th>
+                                        <th>Status</th>
+                                        <th>Registered</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Credits Section -->
+                <div id="credits" class="section" style="display: none;">
+                    <!-- Quick Credit Management -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Quick Credit Management</h3>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                            <!-- Add Credits -->
+                            <div style="background: var(--panel2); padding: 20px; border-radius: var(--radius); border: 1px solid var(--border);">
+                                <h4 style="color: var(--success); margin-bottom: 15px;"><i class="fas fa-plus-circle"></i> Add Credits</h4>
+                                <div class="form-group">
+                                    <label class="form-label">Select User</label>
+                                    <select id="addCreditUserId" class="form-control">
+                                        <option value="">Choose User...</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Credit Amount</label>
+                                    <input type="number" id="addCreditAmount" class="form-control" min="1" placeholder="Enter amount to add">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Reason</label>
+                                    <input type="text" id="addCreditReason" class="form-control" placeholder="Reason for adding credits">
+                                </div>
+                                <button class="btn btn-success" onclick="quickAddCredits()" style="width: 100%;">
+                                    <i class="fas fa-plus"></i> Add Credits
+                                </button>
+                            </div>
+                            
+                            <!-- Remove Credits -->
+                            <div style="background: var(--panel2); padding: 20px; border-radius: var(--radius); border: 1px solid var(--border);">
+                                <h4 style="color: var(--danger); margin-bottom: 15px;"><i class="fas fa-minus-circle"></i> Remove Credits</h4>
+                                <div class="form-group">
+                                    <label class="form-label">Select User</label>
+                                    <select id="removeCreditUserId" class="form-control">
+                                        <option value="">Choose User...</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Credit Amount</label>
+                                    <input type="number" id="removeCreditAmount" class="form-control" min="1" placeholder="Enter amount to remove">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Reason</label>
+                                    <input type="text" id="removeCreditReason" class="form-control" placeholder="Reason for removing credits">
+                                </div>
+                                <button class="btn btn-warning" onclick="quickRemoveCredits()" style="width: 100%;">
+                                    <i class="fas fa-minus"></i> Remove Credits
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bulk Credit Management -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Bulk Credit Operations</h3>
+                        </div>
+                        <div style="display: flex; gap: 15px; flex-wrap: wrap; align-items: end;">
+                            <div class="form-group" style="flex: 1; min-width: 150px;">
+                                <label class="form-label">Amount</label>
+                                <input type="number" id="bulkAmount" class="form-control" placeholder="Credit amount">
+                            </div>
+                            <div class="form-group" style="flex: 2; min-width: 200px;">
+                                <label class="form-label">Reason</label>
+                                <input type="text" id="bulkReason" class="form-control" placeholder="Reason for bulk operation">
+                            </div>
+                            <div style="display: flex; gap: 10px;">
+                                <button class="btn btn-success" onclick="bulkAddCredits()">
+                                    <i class="fas fa-users"></i> Add to All Active Users
+                                </button>
+                                <button class="btn btn-info" onclick="showBulkUserSelector()">
+                                    <i class="fas fa-list-check"></i> Select Users
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- User Credit Overview -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">User Credit Overview</h3>
+                            <div style="display: flex; gap: 10px;">
+                                <button class="btn btn-secondary" onclick="loadUserCredits()">
+                                    <i class="fas fa-sync-alt"></i> Refresh
+                                </button>
+                                <button class="btn btn-info" onclick="exportUserCredits()">
+                                    <i class="fas fa-download"></i> Export
+                                </button>
+                            </div>
+                        </div>
+                        <div class="table-container">
+                            <table id="userCreditsTable">
+                                <thead>
+                                    <tr>
+                                        <th>User</th>
+                                        <th>Email</th>
+                                        <th>Current Credits</th>
+                                        <th>Total Earned</th>
+                                        <th>Total Spent</th>
+                                        <th>Last Activity</th>
+                                        <th>Quick Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Transaction History -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Credit Transaction History</h3>
+                            <div style="display: flex; gap: 10px;">
+                                <select id="transactionUserFilter" class="form-control" style="width: 200px;">
+                                    <option value="">All Users</option>
+                                </select>
+                                <select id="transactionTypeFilter" class="form-control" style="width: 150px;">
+                                    <option value="">All Types</option>
+                                    <option value="positive">Credits Added</option>
+                                    <option value="negative">Credits Deducted</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="table-container">
+                            <table id="creditsTable">
+                                <thead>
+                                    <tr>
+                                        <th>Transaction ID</th>
+                                        <th>User</th>
+                                        <th>Amount</th>
+                                        <th>Reason</th>
+                                        <th>Performed By</th>
+                                        <th>Date</th>
+                                        <th>Balance After</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Requests Section -->
+                <div id="payments" class="section" style="display: none;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Payment Requests</h3>
+                            <div class="card-actions">
+                                <button class="btn btn-primary" onclick="loadPaymentRequests()">
+                                    <i class="fas fa-sync"></i> Refresh
+                                </button>
+                            </div>
+                        </div>
+                        <div class="table-container">
+                            <div class="table-wrap">
+                                <table class="table" id="paymentRequestsTable">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>User</th>
+                                            <th>Amount</th>
+                                            <th>Credits</th>
+                                            <th>Bank Ref</th>
+                                            <th>Status</th>
+                                            <th>Date</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Activities Section -->
+                <div id="activities" class="section" style="display: none;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">System Activities</h3>
+                        </div>
+                        <div class="timeline" id="activitiesTimeline"></div>
+                    </div>
+                </div>
+
+                <!-- Settings Section -->
+                <div id="settings" class="section" style="display: none;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">System Settings</h3>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Default Credits for New Users</label>
+                            <input type="number" id="defaultCredits" class="form-control" min="0" value="3">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">
+                                <input type="checkbox" id="autoProcessing"> Enable Auto Processing
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">
+                                <input type="checkbox" id="emailNotifications" checked> Enable Email Notifications
+                            </label>
+                        </div>
+                        <button class="btn btn-success" onclick="saveSettings()">
+                            <i class="fas fa-save"></i> Save Settings
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check admin authentication
+        if (typeof EnhancedAuth !== 'undefined') {
+            if (!EnhancedAuth.isLoggedIn() || !EnhancedAuth.isAdmin()) {
+                window.location.href = '../Login/login.html';
+            }
+        }
+
+        // Global variables
+        let currentSection = 'dashboard';
+        let refreshInterval;
+
+        // Initialize admin panel
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeAdminPanel();
+            loadDashboardData();
+            startAutoRefresh();
+        });
+
+        function initializeAdminPanel() {
+            if (typeof EnhancedAuth !== 'undefined') {
+                const adminUser = EnhancedAuth.getCurrentUser();
+                if (adminUser) {
+                    document.getElementById('adminInfo').textContent = adminUser.name;
+                }
+            }
+
+            // Setup menu navigation
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const section = this.dataset.section;
+                    showSection(section);
+                });
+            });
+
+            // Setup refresh button
+            document.getElementById('refreshBtn').addEventListener('click', refreshCurrentSection);
+            
+            // Add event listeners for transaction filters
+            if (document.getElementById('transactionUserFilter')) {
+                document.getElementById('transactionUserFilter').addEventListener('change', loadTransactionHistory);
+            }
+            if (document.getElementById('transactionTypeFilter')) {
+                document.getElementById('transactionTypeFilter').addEventListener('change', loadTransactionHistory);
+            }
+        }
+
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.style.display = 'none';
+            });
+
+            // Remove active class from all menu items
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // Show selected section
+            document.getElementById(sectionName).style.display = 'block';
+            
+            // Add active class to selected menu item
+            document.querySelector(`.menu-item[data-section="${sectionName}"]`).classList.add('active');
+
+            // Update section title
+            const titles = {
+                'dashboard': 'Dashboard',
+                'vin-requests': 'VIN Requests',
+                'users': 'User Management',
+                'credits': 'Credit Management',
+                'payments': 'Payment Requests',
+                'activities': 'Activity Log',
+                'settings': 'Settings'
+            };
+            document.getElementById('sectionTitle').textContent = titles[sectionName];
+
+            currentSection = sectionName;
+            loadSectionData(sectionName);
+        }
+
+        function loadSectionData(section) {
+            switch (section) {
+                case 'dashboard':
+                    loadDashboardData();
+                    break;
+                case 'vin-requests':
+                    loadVinRequests();
+                    break;
+                case 'users':
+                    loadUsers();
+                    break;
+                case 'credits':
+                    loadCredits();
+                    break;
+                case 'payments':
+                    loadPaymentRequests();
+                    break;
+                case 'activities':
+                    loadActivities();
+                    break;
+                case 'settings':
+                    loadSettings();
+                    break;
+            }
+        }
+
+        function loadDashboardData() {
+            if (typeof AdminManager !== 'undefined') {
+                const stats = AdminManager.getDashboardStats();
+                
+                // Update stat cards
+                document.getElementById('totalUsers').textContent = stats.totalUsers;
+                document.getElementById('totalRequests').textContent = stats.totalRequests;
+                document.getElementById('todayRequests').textContent = stats.todayRequests;
+                document.getElementById('avgProcessingTime').textContent = stats.averageProcessingTime;
+                document.getElementById('pendingCount').textContent = stats.pendingRequests;
+            }
+
+            // Load recent requests
+            loadRecentRequests();
+            
+            // Load recent activities
+            loadRecentActivities();
+        }
+
+        function loadRecentRequests() {
+            if (typeof VinRequestManager === 'undefined') return;
+            
+            const requests = VinRequestManager.getAllRequests().slice(0, 10);
+            const tbody = document.querySelector('#recentRequestsTable tbody');
+            
+            tbody.innerHTML = requests.map(request => `
+                <tr>
+                    <td><code>${request.id.substring(0, 12)}</code></td>
+                    <td>${request.userName}</td>
+                    <td><code>${request.vin}</code></td>
+                    <td><span class="status-pill ${request.status}">${getStatusText(request.status)}</span></td>
+                    <td>${formatDate(request.createdAt)}</td>
+                    <td>
+                        <button class="btn btn-info btn-sm" onclick="viewRequest('${request.id}')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        ${request.status === 'pending' ? `
+                            <button class="btn btn-success btn-sm" onclick="processRequest('${request.id}')">
+                                <i class="fas fa-upload"></i>
+                            </button>
+                        ` : ''}
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function loadVinRequests() {
+            if (typeof VinRequestManager === 'undefined') return;
+            
+            const requests = VinRequestManager.getAllRequests();
+            const tbody = document.querySelector('#vinRequestsTable tbody');
+            
+            tbody.innerHTML = requests.map(request => `
+                <tr>
+                    <td><code>${request.id.substring(0, 12)}</code></td>
+                    <td>
+                        <div>${request.userName}</div>
+                        <div style="font-size: 11px; color: var(--muted);">${request.userEmail}</div>
+                    </td>
+                    <td><code style="font-weight: bold;">${request.vin}</code></td>
+                    <td><span class="status-pill ${request.plan}">${request.plan.toUpperCase()}</span></td>
+                    <td><span class="status-pill ${request.status}">${getStatusText(request.status)}</span></td>
+                    <td>${formatDate(request.createdAt)}</td>
+                    <td>
+                        <div style="display: flex; gap: 5px;">
+                            <button class="btn btn-info btn-sm" onclick="viewRequest('${request.id}')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            ${request.status === 'pending' ? `
+                                <button class="btn btn-success btn-sm" onclick="processRequest('${request.id}')">
+                                    <i class="fas fa-upload"></i>
+                                </button>
+                                <button class="btn btn-warning btn-sm" onclick="rejectRequest('${request.id}')">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            ` : ''}
+                            ${request.status === 'processed' ? `
+                                <button class="btn btn-primary btn-sm" onclick="sendPDF('${request.id}')">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            ` : ''}
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function loadUsers() {
+            if (typeof UserManager === 'undefined') return;
+            
+            const users = Object.values(UserManager.getAllUsers());
+            const tbody = document.querySelector('#usersTable tbody');
+            
+            tbody.innerHTML = users.map(user => `
+                <tr>
+                    <td><code>${user.id.substring(0, 12)}</code></td>
+                    <td>${user.name}</td>
+                    <td>${user.email}</td>
+                    <td>
+                        <span style="font-weight: bold; color: var(--success);">${user.credits}</span>
+                        <button class="btn btn-sm btn-secondary" onclick="manageUserCredits('${user.id}')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </td>
+                    <td>${user.totalVinChecked || 0}</td>
+                    <td><span class="status-pill ${user.status || 'active'}">${user.status || 'active'}</span></td>
+                    <td>${formatDate(user.registrationTime)}</td>
+                    <td>
+                        <button class="btn btn-info btn-sm" onclick="viewUserDetails('${user.id}')">
+                            <i class="fas fa-user"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function loadCredits() {
+            // Load user dropdowns
+            loadUserDropdowns();
+            
+            // Load user credits overview
+            loadUserCredits();
+            
+            // Load transaction history with filters
+            loadTransactionHistory();
+        }
+
+        function loadUserDropdowns() {
+            if (typeof UserManager === 'undefined') return;
+            
+            const users = Object.values(UserManager.getAllUsers());
+            const addSelect = document.getElementById('addCreditUserId');
+            const removeSelect = document.getElementById('removeCreditUserId');
+            const filterSelect = document.getElementById('transactionUserFilter');
+            
+            const userOptions = users.map(user => 
+                `<option value="${user.id}">${user.name} (${user.email}) - ${user.credits} credits</option>`
+            ).join('');
+            
+            addSelect.innerHTML = '<option value="">Choose User...</option>' + userOptions;
+            removeSelect.innerHTML = '<option value="">Choose User...</option>' + userOptions;
+            filterSelect.innerHTML = '<option value="">All Users</option>' + users.map(user => 
+                `<option value="${user.id}">${user.name}</option>`
+            ).join('');
+        }
+
+        function loadUserCredits() {
+            if (typeof UserManager === 'undefined') return;
+            
+            const users = Object.values(UserManager.getAllUsers());
+            const tbody = document.querySelector('#userCreditsTable tbody');
+            
+            tbody.innerHTML = users.map(user => `
+                <tr>
+                    <td><strong>${user.name}</strong></td>
+                    <td>${user.email}</td>
+                    <td>
+                        <span style="font-size: 18px; font-weight: bold; color: ${user.credits < 5 ? 'var(--danger)' : 'var(--success)'};">
+                            ${user.credits}
+                        </span>
+                    </td>
+                    <td>${user.totalCreditsEarned || 0}</td>
+                    <td>${user.totalCreditsSpent || 0}</td>
+                    <td>${user.statistics?.lastActivity ? formatDate(user.statistics.lastActivity) : 'Never'}</td>
+                    <td>
+                        <div style="display: flex; gap: 5px;">
+                            <button class="btn btn-success btn-sm" onclick="quickUserAction('${user.id}', 'add')" title="Add Credits">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                            <button class="btn btn-warning btn-sm" onclick="quickUserAction('${user.id}', 'remove')" title="Remove Credits">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <button class="btn btn-info btn-sm" onclick="viewUserCreditHistory('${user.id}')" title="View History">
+                                <i class="fas fa-history"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        async function loadTransactionHistory() {
+            if (typeof CreditManager === 'undefined') return;
+            
+            try {
+                let transactions = await CreditManager.getAllTransactions();
+                const userFilter = document.getElementById('transactionUserFilter')?.value;
+                const typeFilter = document.getElementById('transactionTypeFilter')?.value;
+                
+                // Apply filters
+                if (userFilter) {
+                    transactions = transactions.filter(t => t.user_id == userFilter);
+                }
+                
+                if (typeFilter === 'positive') {
+                    transactions = transactions.filter(t => t.amount > 0);
+                } else if (typeFilter === 'negative') {
+                    transactions = transactions.filter(t => t.amount < 0);
+                }
+                
+                const tbody = document.querySelector('#creditsTable tbody');
+                tbody.innerHTML = transactions.slice(0, 50).map(transaction => `
+                    <tr>
+                        <td><code>${transaction.transaction_id.substring(0, 12)}</code></td>
+                        <td>${transaction.user_name || 'Unknown'}</td>
+                        <td style="color: ${transaction.amount > 0 ? 'var(--success)' : 'var(--danger)'}; font-weight: bold;">
+                            ${transaction.amount > 0 ? '+' : ''}${transaction.amount}
+                        </td>
+                        <td>${transaction.reason}</td>
+                        <td>${transaction.admin_name || 'System'}</td>
+                        <td>${formatDate(transaction.created_at)}</td>
+                        <td>${transaction.balance_after}</td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error('Failed to load transaction history:', error);
+                const tbody = document.querySelector('#creditsTable tbody');
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: var(--danger);">Failed to load transaction history</td></tr>';
+            }
+        }
+
+        async function loadPaymentRequests() {
+            try {
+                const requests = await PaymentManager.getAllPaymentRequests();
+                const tbody = document.querySelector('#paymentRequestsTable tbody');
+                
+                if (requests.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="8" style="text-align: center; padding: 40px; color: var(--muted);">
+                                No payment requests found
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+
+                tbody.innerHTML = requests.map(request => {
+                    const status = PaymentManager.formatPaymentStatus(request.status);
+                    return `
+                        <tr>
+                            <td>${request.payment_id}</td>
+                            <td>${request.user_name}</td>
+                            <td>${request.amount} ₾</td>
+                            <td>${request.credits}</td>
+                            <td>${request.bank_reference}</td>
+                            <td>
+                                <span class="status-badge ${status.class}">${status.text}</span>
+                            </td>
+                            <td>${EnhancedUI.formatDate(request.created_at)}</td>
+                            <td>
+                                <div class="action-buttons">
+                                    ${request.status === 'pending' ? `
+                                        <button class="btn btn-success btn-sm" onclick="approvePayment('${request.payment_id}')">
+                                            <i class="fas fa-check"></i> Approve
+                                        </button>
+                                        <button class="btn btn-danger btn-sm" onclick="rejectPayment('${request.payment_id}')">
+                                            <i class="fas fa-times"></i> Reject
+                                        </button>
+                                    ` : ''}
+                                    <button class="btn btn-info btn-sm" onclick="viewPaymentDetails('${request.payment_id}')">
+                                        <i class="fas fa-eye"></i> View
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            } catch (error) {
+                console.error('Error loading payment requests:', error);
+                EnhancedUI.showToast('Failed to load payment requests', 'error');
+            }
+        }
+
+        async function approvePayment(paymentId) {
+            const notes = prompt('Enter verification notes (optional):');
+            if (notes === null) return; // User cancelled
+            
+            try {
+                const success = await PaymentManager.updatePaymentStatus(paymentId, 'approved', notes);
+                if (success) {
+                    EnhancedUI.showToast('Payment approved successfully', 'success');
+                    await loadPaymentRequests();
+                    await loadTransactionHistory();
+                } else {
+                    EnhancedUI.showToast('Failed to approve payment', 'error');
+                }
+            } catch (error) {
+                console.error('Error approving payment:', error);
+                EnhancedUI.showToast('Error: ' + error.message, 'error');
+            }
+        }
+
+        async function rejectPayment(paymentId) {
+            const notes = prompt('Enter rejection reason:');
+            if (!notes) return; // User cancelled or empty
+            
+            try {
+                const success = await PaymentManager.updatePaymentStatus(paymentId, 'rejected', notes);
+                if (success) {
+                    EnhancedUI.showToast('Payment rejected', 'warning');
+                    await loadPaymentRequests();
+                } else {
+                    EnhancedUI.showToast('Failed to reject payment', 'error');
+                }
+            } catch (error) {
+                console.error('Error rejecting payment:', error);
+                EnhancedUI.showToast('Error: ' + error.message, 'error');
+            }
+        }
+
+        function viewPaymentDetails(paymentId) {
+            // This would open a modal with payment details
+            EnhancedUI.showToast('Payment details view - to be implemented', 'info');
+        }
+
+        async function loadActivities() {
+            if (typeof ActivityLogger === 'undefined') return;
+            
+            try {
+                const activities = await ActivityLogger.getAllActivities(100);
+                const timeline = document.getElementById('activitiesTimeline');
+                
+                timeline.innerHTML = activities.map(activity => `
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <div class="timeline-time">${formatDate(activity.created_at)}</div>
+                            <div><strong>${activity.user_name || 'System'}</strong></div>
+                            <div style="color: var(--muted); font-size: 12px;">${activity.description}</div>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Failed to load activities:', error);
+                const timeline = document.getElementById('activitiesTimeline');
+                timeline.innerHTML = '<div style="text-align: center; color: var(--danger); padding: 20px;">Failed to load activities</div>';
+            }
+        }
+
+        async function loadRecentActivities() {
+            if (typeof ActivityLogger === 'undefined') return;
+            
+            try {
+                const activities = await ActivityLogger.getAllActivities(10);
+                const timeline = document.getElementById('recentActivities');
+                
+                timeline.innerHTML = activities.map(activity => `
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <div class="timeline-time">${formatDate(activity.created_at)}</div>
+                            <div style="font-size: 12px;">${activity.description}</div>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Failed to load recent activities:', error);
+                const timeline = document.getElementById('recentActivities');
+                timeline.innerHTML = '<div style="text-align: center; color: var(--danger); padding: 20px;">Failed to load recent activities</div>';
+            }
+        }
+
+        function loadSettings() {
+            if (typeof VinDatabase === 'undefined') return;
+            
+            const settings = VinDatabase.get(VinDatabase.ADMIN_SETTINGS_KEY, {});
+            document.getElementById('defaultCredits').value = settings.defaultCredits || 3;
+            document.getElementById('autoProcessing').checked = settings.autoProcessing || false;
+            document.getElementById('emailNotifications').checked = settings.emailNotifications !== false;
+        }
+
+        // Credit Management Functions
+        async function quickAddCredits() {
+            const userId = document.getElementById('addCreditUserId').value;
+            const amount = parseInt(document.getElementById('addCreditAmount').value);
+            const reason = document.getElementById('addCreditReason').value || 'Admin credit adjustment';
+            
+            if (!userId || !amount || amount <= 0) {
+                EnhancedUI.EnhancedUI.showToast('Please fill in all fields with valid values', 'error');
+                return;
+            }
+            
+            try {
+                if (typeof CreditManager !== 'undefined' && typeof EnhancedAuth !== 'undefined') {
+                    const adminId = EnhancedAuth.getCurrentUser()?.id || 'admin';
+                    const success = await CreditManager.addCredits(userId, amount, reason, adminId);
+                    if (success) {
+                        EnhancedUI.showToast(`Successfully added ${amount} credits to user`, 'success');
+                        // Log activity
+                        await ActivityLogger.log('admin_credit_add', `Added ${amount} credits to user ${userId}. Reason: ${reason}`);
+                        // Reset fields
+                        document.getElementById('addCreditAmount').value = '';
+                        document.getElementById('addCreditReason').value = '';
+                        // Refresh the tables
+                        loadUserCredits();
+                        await loadTransactionHistory();
+                        await loadActivities();
+                    } else {
+                        EnhancedUI.showToast('Failed to add credits', 'error');
+                    }
+                }
+            } catch (error) {
+                EnhancedUI.showToast('Error: ' + error.message, 'error');
+            }
+        }
+        
+        async function quickRemoveCredits() {
+            const userId = document.getElementById('removeCreditUserId').value;
+            const amount = parseInt(document.getElementById('removeCreditAmount').value);
+            const reason = document.getElementById('removeCreditReason').value || 'Admin credit deduction';
+            
+            if (!userId || !amount || amount <= 0) {
+                EnhancedUI.EnhancedUI.showToast('Please fill in all fields with valid values', 'error');
+                return;
+            }
+            
+            try {
+                if (typeof CreditManager !== 'undefined' && typeof EnhancedAuth !== 'undefined') {
+                    const adminId = EnhancedAuth.getCurrentUser()?.id || 'admin';
+                    const success = await CreditManager.deductCredits(userId, amount, reason, adminId);
+                    if (success) {
+                        EnhancedUI.showToast(`Successfully removed ${amount} credits from user`, 'success');
+                        // Log activity
+                        await ActivityLogger.log('admin_credit_remove', `Removed ${amount} credits from user ${userId}. Reason: ${reason}`);
+                        // Reset fields
+                        document.getElementById('removeCreditAmount').value = '';
+                        document.getElementById('removeCreditReason').value = '';
+                        // Refresh the tables
+                        loadUserCredits();
+                        await loadTransactionHistory();
+                        await loadActivities();
+                    } else {
+                        EnhancedUI.showToast('Failed to remove credits', 'error');
+                    }
+                }
+            } catch (error) {
+                EnhancedUI.showToast('Error: ' + error.message, 'error');
+            }
+        }
+        
+        function bulkAddCredits() {
+            const amount = parseInt(document.getElementById('bulkAmount').value);
+            const reason = document.getElementById('bulkReason').value || 'Bulk credit adjustment';
+            
+            if (!amount || amount <= 0 || !reason) {
+                EnhancedUI.showToast('Please enter a valid amount and reason', 'error');
+                return;
+            }
+            
+            // Confirm with the admin
+            if (!confirm(`Are you sure you want to add ${amount} credits to ALL active users?`)) {
+                return;
+            }
+            
+            if (typeof UserManager !== 'undefined' && typeof CreditManager !== 'undefined') {
+                const users = Object.values(UserManager.getAllUsers()).filter(user => (user.status || 'active') === 'active');
+                const adminId = EnhancedAuth?.getCurrentUser()?.id || 'admin';
+                let successCount = 0;
+                
+                users.forEach(user => {
+                    try {
+                        CreditManager.addCredits(user.id, amount, reason, adminId);
+                        successCount++;
+                    } catch (error) {
+                        console.error(`Failed to add credits to user ${user.id}: ${error.message}`);
+                    }
+                });
+                
+                EnhancedUI.showToast(`Added ${amount} credits to ${successCount} users`, 'success');
+                document.getElementById('bulkAmount').value = '';
+                document.getElementById('bulkReason').value = '';
+                loadUserCredits();
+                loadTransactionHistory();
+            }
+        }
+        
+        function showBulkUserSelector() {
+            if (typeof UserManager === 'undefined') return;
+            
+            const users = Object.values(UserManager.getAllUsers());
+            const amount = parseInt(document.getElementById('bulkAmount').value);
+            const reason = document.getElementById('bulkReason').value || 'Selected users credit adjustment';
+            
+            if (!amount || amount <= 0) {
+                EnhancedUI.showToast('Please enter a valid amount', 'error');
+                return;
+            }
+            
+            const userCheckboxes = users.map(user => `
+                <div style="margin-bottom: 8px;">
+                    <input type="checkbox" id="user_${user.id}" value="${user.id}">
+                    <label for="user_${user.id}">
+                        ${user.name} (${user.email}) - ${user.credits} credits
+                    </label>
+                </div>
+            `).join('');
+            
+            showModal('Select Users for Credit Addition', `
+                <div style="margin-bottom: 15px;">
+                    <strong>Amount:</strong> ${amount} credits<br>
+                    <strong>Reason:</strong> ${reason}
+                </div>
+                <div style="margin-bottom: 10px; display: flex; gap: 10px;">
+                    <button class="btn btn-secondary" onclick="selectAllUsers()">Select All</button>
+                    <button class="btn btn-secondary" onclick="deselectAllUsers()">Deselect All</button>
+                </div>
+                <div style="max-height: 300px; overflow-y: auto; padding: 10px; border: 1px solid var(--border); border-radius: var(--radius);">
+                    ${userCheckboxes}
+                </div>
+            `, [
+                {
+                    text: 'Add Credits to Selected Users',
+                    class: 'btn-success',
+                    onclick: 'addCreditsToSelectedUsers(); closeModal();'
+                }
+            ]);
+        }
+        
+        function quickUserAction(userId, action) {
+            if (typeof UserManager === 'undefined') return;
+            
+            const user = UserManager.getUserById(userId);
+            if (!user) return;
+            
+            let amount = prompt(`Enter ${action === 'add' ? 'amount to add' : 'amount to remove'} for ${user.name}:`);
+            amount = parseInt(amount);
+            
+            if (!amount || isNaN(amount) || amount <= 0) {
+                EnhancedUI.showToast('Please enter a valid amount', 'error');
+                return;
+            }
+            
+            const reason = prompt('Enter reason:') || `Quick ${action === 'add' ? 'addition' : 'deduction'} by admin`;
+            const adminId = EnhancedAuth?.getCurrentUser()?.id || 'admin';
+            
+            try {
+                if (typeof CreditManager !== 'undefined') {
+                    if (action === 'add') {
+                        CreditManager.addCredits(userId, amount, reason, adminId);
+                        EnhancedUI.showToast(`Added ${amount} credits to ${user.name}`, 'success');
+                    } else {
+                        CreditManager.deductCredits(userId, amount, reason, adminId);
+                        EnhancedUI.showToast(`Removed ${amount} credits from ${user.name}`, 'warning');
+                    }
+                    loadUserCredits();
+                    loadTransactionHistory();
+                }
+            } catch (error) {
+                EnhancedUI.showToast('Error: ' + error.message, 'error');
+            }
+        }
+
+        function viewUserCreditHistory(userId) {
+            if (typeof UserManager === 'undefined' || typeof CreditManager === 'undefined') return;
+            
+            const user = UserManager.getUserById(userId);
+            if (!user) return;
+            
+            const transactions = CreditManager.getUserTransactions(userId);
+            
+            showModal(`Credit History: ${user.name}`, `
+                <div style="margin-bottom: 15px;">
+                    <strong>User:</strong> ${user.name} (${user.email})<br>
+                    <strong>Current Credits:</strong> ${user.credits}<br>
+                    <strong>Total Earned:</strong> ${user.totalCreditsEarned || 0}<br>
+                    <strong>Total Spent:</strong> ${user.totalCreditsSpent || 0}
+                </div>
+                <div class="table-container" style="max-height: 400px; overflow-y: auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Amount</th>
+                                <th>Reason</th>
+                                <th>Performed By</th>
+                                <th>Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${transactions.map(t => `
+                                <tr>
+                                    <td>${formatDate(t.timestamp)}</td>
+                                    <td style="color: ${t.amount > 0 ? 'var(--success)' : 'var(--danger)'}; font-weight: bold;">
+                                        ${t.amount > 0 ? '+' : ''}${t.amount}
+                                    </td>
+                                    <td>${t.reason}</td>
+                                    <td>${t.performedBy}</td>
+                                    <td>${t.balanceAfter}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `);
+        }
+
+        function exportUserCredits() {
+            if (typeof UserManager === 'undefined') return;
+            
+            const users = Object.values(UserManager.getAllUsers());
+            let csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "Name,Email,Current Credits,Total Earned,Total Spent,Last Activity\\n";
+            
+            users.forEach(user => {
+                const row = [
+                    user.name,
+                    user.email,
+                    user.credits,
+                    user.totalCreditsEarned || 0,
+                    user.totalCreditsSpent || 0,
+                    user.statistics?.lastActivity ? new Date(user.statistics.lastActivity).toLocaleDateString() : 'Never'
+                ];
+                csvContent += row.join(',') + "\\n";
+            });
+            
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "user_credits_export.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Action functions
+        function processRequest(requestId) {
+            showModal('Process VIN Request', `
+                <div class="form-group">
+                    <label class="form-label">Upload PDF Report</label>
+                    <div class="file-upload">
+                        <input type="file" id="pdfFile" accept=".pdf">
+                        <label class="file-upload-label" for="pdfFile">
+                            <i class="fas fa-upload"></i>
+                            Choose PDF File
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Processing Notes</label>
+                    <textarea id="processingNotes" class="form-control" rows="3" placeholder="Add any processing notes..."></textarea>
+                </div>
+            `, [
+                {
+                    text: 'Process Request',
+                    class: 'btn-success',
+                    onclick: `uploadPDFAndProcess('${requestId}'); closeModal();`
+                }
+            ]);
+        }
+
+        function uploadPDFAndProcess(requestId) {
+            const fileInput = document.getElementById('pdfFile');
+            const notes = document.getElementById('processingNotes').value;
+            const file = fileInput.files[0];
+
+            if (!file) {
+                EnhancedUI.showToast('Please select a PDF file', 'error');
+                return;
+            }
+
+            if (file.type !== 'application/pdf') {
+                EnhancedUI.showToast('Please select a valid PDF file', 'error');
+                return;
+            }
+
+            if (typeof PDFManager !== 'undefined' && typeof EnhancedAuth !== 'undefined') {
+                const adminId = EnhancedAuth.getCurrentUser()?.id || 'admin';
+                
+                PDFManager.uploadPDF(requestId, file, adminId)
+                    .then(result => {
+                        EnhancedUI.showToast('PDF uploaded and request processed successfully!', 'success');
+                        refreshCurrentSection();
+                    })
+                    .catch(error => {
+                        EnhancedUI.showToast('Error processing request: ' + error.message, 'error');
+                    });
+            }
+        }
+
+        function rejectRequest(requestId) {
+            const reason = prompt('Enter rejection reason:');
+            if (reason && typeof VinRequestManager !== 'undefined') {
+                const adminId = EnhancedAuth?.getCurrentUser()?.id || 'admin';
+                VinRequestManager.updateRequestStatus(requestId, 'rejected', adminId, reason);
+                EnhancedUI.showToast('Request rejected', 'warning');
+                refreshCurrentSection();
+            }
+        }
+
+        function sendPDF(requestId) {
+            if (typeof PDFManager !== 'undefined') {
+                const adminId = EnhancedAuth?.getCurrentUser()?.id || 'admin';
+                try {
+                    PDFManager.sendPDFToUser(requestId, adminId);
+                    EnhancedUI.showToast('PDF sent to user successfully!', 'success');
+                    refreshCurrentSection();
+                } catch (error) {
+                    EnhancedUI.showToast('Error sending PDF: ' + error.message, 'error');
+                }
+            }
+        }
+
+        function viewRequest(requestId) {
+            if (typeof VinRequestManager === 'undefined') return;
+            
+            const request = VinRequestManager.getRequestById(requestId);
+            if (!request) return;
+
+            showModal('VIN Request Details', `
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                    <div><strong>Request ID:</strong> ${request.id}</div>
+                    <div><strong>Status:</strong> <span class="status-pill ${request.status}">${getStatusText(request.status)}</span></div>
+                    <div><strong>User:</strong> ${request.userName}</div>
+                    <div><strong>Email:</strong> ${request.userEmail}</div>
+                    <div><strong>VIN:</strong> <code>${request.vin}</code></div>
+                    <div><strong>Plan:</strong> ${request.plan.toUpperCase()}</div>
+                    <div><strong>Created:</strong> ${formatDate(request.createdAt)}</div>
+                    <div><strong>Updated:</strong> ${formatDate(request.updatedAt)}</div>
+                </div>
+                ${request.notes ? `<div><strong>Notes:</strong><br>${request.notes}</div>` : ''}
+                ${request.pdfFileName ? `<div><strong>PDF:</strong> ${request.pdfFileName}</div>` : ''}
+            `);
+        }
+
+        function manageUserCredits(userId) {
+            if (typeof UserManager === 'undefined') return;
+            
+            const user = UserManager.getUserById(userId);
+            if (!user) return;
+
+            showModal('Manage User Credits', `
+                <div style="margin-bottom: 15px;">
+                    <strong>User:</strong> ${user.name} (${user.email})<br>
+                    <strong>Current Credits:</strong> ${user.credits}
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Credit Amount</label>
+                    <input type="number" id="creditAmount" class="form-control" placeholder="Enter amount (positive to add, negative to deduct)">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Reason</label>
+                    <input type="text" id="creditReason" class="form-control" placeholder="Enter reason for credit adjustment">
+                </div>
+            `, [
+                {
+                    text: 'Apply Changes',
+                    class: 'btn-success',
+                    onclick: `applyCreditChanges('${userId}'); closeModal();`
+                }
+            ]);
+        }
+
+        function applyCreditChanges(userId) {
+            const amount = parseInt(document.getElementById('creditAmount').value);
+            const reason = document.getElementById('creditReason').value;
+
+            if (!amount || !reason) {
+                EnhancedUI.showToast('Please fill in all fields', 'error');
+                return;
+            }
+
+            try {
+                if (typeof CreditManager !== 'undefined') {
+                    const adminId = EnhancedAuth?.getCurrentUser()?.id || 'admin';
+                    if (amount > 0) {
+                        CreditManager.addCredits(userId, amount, reason, adminId);
+                    } else {
+                        CreditManager.deductCredits(userId, Math.abs(amount), reason, adminId);
+                    }
+                    EnhancedUI.showToast('Credits updated successfully', 'success');
+                    refreshCurrentSection();
+                }
+            } catch (error) {
+                EnhancedUI.showToast('Error: ' + error.message, 'error');
+            }
+        }
+
+        function viewUserDetails(userId) {
+            if (typeof AdminManager === 'undefined') return;
+            
+            const details = AdminManager.getUserDetails(userId);
+            if (!details) return;
+
+            const user = details.user;
+
+            showModal('User Details', `
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                    <div><strong>Name:</strong> ${user.name}</div>
+                    <div><strong>Email:</strong> ${user.email}</div>
+                    <div><strong>Credits:</strong> ${user.credits}</div>
+                    <div><strong>Status:</strong> <span class="status-pill ${user.status || 'active'}">${user.status || 'active'}</span></div>
+                    <div><strong>Total VIN Checked:</strong> ${user.totalVinChecked || 0}</div>
+                    <div><strong>Credits Earned:</strong> ${user.totalCreditsEarned || 0}</div>
+                    <div><strong>Credits Spent:</strong> ${user.totalCreditsSpent || 0}</div>
+                    <div><strong>Total Logins:</strong> ${user.statistics?.totalLogins || 0}</div>
+                    <div><strong>Registered:</strong> ${formatDate(user.registrationTime)}</div>
+                    <div><strong>Last Login:</strong> ${user.lastLoginTime ? formatDate(user.lastLoginTime) : 'Never'}</div>
+                </div>
+                <div><strong>Recent Activities:</strong></div>
+                <div class="timeline" style="margin-top: 10px; max-height: 200px; overflow-y: auto;">
+                    ${details.activities.slice(0, 5).map(activity => `
+                        <div class="timeline-item">
+                            <div class="timeline-content">
+                                <div class="timeline-time">${formatDate(activity.timestamp)}</div>
+                                <div style="font-size: 12px;">${activity.description}</div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `, [
+                {
+                    text: 'Manage Credits',
+                    class: 'btn-warning',
+                    onclick: `closeModal(); manageUserCredits('${userId}');`
+                }
+            ]);
+        }
+
+        function saveSettings() {
+            if (typeof VinDatabase !== 'undefined') {
+                const settings = {
+                    defaultCredits: parseInt(document.getElementById('defaultCredits').value),
+                    autoProcessing: document.getElementById('autoProcessing').checked,
+                    emailNotifications: document.getElementById('emailNotifications').checked
+                };
+
+                VinDatabase.set(VinDatabase.ADMIN_SETTINGS_KEY, settings);
+                EnhancedUI.showToast('Settings saved successfully', 'success');
+            }
+        }
+
+        // Utility functions
+        function getStatusText(status) {
+            const statusMap = {
+                'pending': 'Pending',
+                'processed': 'Processed',
+                'rejected': 'Rejected',
+                'delivered': 'Delivered'
+            };
+            return statusMap[status] || status;
+        }
+
+        function formatDate(timestamp) {
+            if (typeof EnhancedUI !== 'undefined') {
+                return EnhancedUI.formatDate(timestamp);
+            }
+            return new Date(timestamp).toLocaleDateString();
+        }
+
+        function refreshCurrentSection() {
+            loadSectionData(currentSection);
+        }
+
+        function startAutoRefresh() {
+            refreshInterval = setInterval(() => {
+                if (currentSection === 'dashboard' || currentSection === 'vin-requests') {
+                    refreshCurrentSection();
+                }
+            }, 30000); // Refresh every 30 seconds
+        }
+
+        // Simple modal system
+        function showModal(title, content, buttons = []) {
+            // Remove existing modal
+            const existingModal = document.querySelector('.modal-overlay');
+            if (existingModal) {
+                existingModal.remove();
+            }
+
+            const modalOverlay = document.createElement('div');
+            modalOverlay.className = 'modal-overlay';
+            modalOverlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.8);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 10000;
+            `;
+
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.style.cssText = `
+                background: var(--panel);
+                border: 1px solid var(--border);
+                border-radius: var(--radius);
+                padding: 20px;
+                max-width: 600px;
+                max-height: 80vh;
+                overflow-y: auto;
+                box-shadow: var(--shadow);
+            `;
+
+            const buttonHtml = buttons.map(btn => 
+                `<button class="btn ${btn.class}" onclick="${btn.onclick}">${btn.text}</button>`
+            ).join('');
+
+            modal.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3>${title}</h3>
+                    <button class="btn btn-secondary" onclick="closeModal()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div>${content}</div>
+                ${buttonHtml ? `<div style="margin-top: 20px; display: flex; gap: 10px; justify-content: flex-end;">${buttonHtml}</div>` : ''}
+            `;
+
+            modalOverlay.appendChild(modal);
+            document.body.appendChild(modalOverlay);
+
+            // Close on overlay click
+            modalOverlay.addEventListener('click', (e) => {
+                if (e.target === modalOverlay) {
+                    closeModal();
+                }
+            });
+        }
+
+        function closeModal() {
+            const modal = document.querySelector('.modal-overlay');
+            if (modal) {
+                modal.remove();
+            }
+        }
+
+
+        // Helper functions for bulk operations
+        function selectAllUsers() {
+            document.querySelectorAll('input[type="checkbox"][id^="user_"]').forEach(checkbox => {
+                checkbox.checked = true;
+            });
+        }
+        
+        function deselectAllUsers() {
+            document.querySelectorAll('input[type="checkbox"][id^="user_"]').forEach(checkbox => {
+                checkbox.checked = false;
+            });
+        }
+        
+        function addCreditsToSelectedUsers() {
+            const selectedUserIds = Array.from(
+                document.querySelectorAll('input[type="checkbox"][id^="user_"]:checked')
+            ).map(checkbox => checkbox.value);
+            
+            if (selectedUserIds.length === 0) {
+                EnhancedUI.showToast('No users selected', 'warning');
+                return;
+            }
+            
+            const amount = parseInt(document.getElementById('bulkAmount').value);
+            const reason = document.getElementById('bulkReason').value || 'Selected users credit adjustment';
+            const adminId = EnhancedAuth?.getCurrentUser()?.id || 'admin';
+            let successCount = 0;
+            
+            if (typeof CreditManager !== 'undefined') {
+                selectedUserIds.forEach(userId => {
+                    try {
+                        CreditManager.addCredits(userId, amount, reason, adminId);
+                        successCount++;
+                    } catch (error) {
+                        console.error(`Failed to add credits to user ${userId}: ${error.message}`);
+                    }
+                });
+                
+                EnhancedUI.showToast(`Added ${amount} credits to ${successCount} users`, 'success');
+                document.getElementById('bulkAmount').value = '';
+                document.getElementById('bulkReason').value = '';
+                loadUserCredits();
+                loadTransactionHistory();
+            }
+        }
+    </script>
+</body>
+</html>
