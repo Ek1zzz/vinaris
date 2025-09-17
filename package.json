@@ -44,7 +44,6 @@
     "qrcode": "^1.5.4",
     "speakeasy": "^2.0.0",
     "sqlite3": "^5.1.6",
-    "better-sqlite3": "^8.7.0",
     "stripe": "^12.17.0",
     "uuid": "^9.0.0",
     "validator": "^13.15.15"
