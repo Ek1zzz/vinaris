@@ -4,18 +4,11 @@
   "description": "VINaris VIN checking service backend API",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "node init-db.js && node server.js",
     "dev": "nodemon server.js",
     "migrate": "node database/migrate.js",
     "backup": "cd database && ./backup.sh",
-    "test": "jest",
-    "seed": "node database/db-helper.js test",
-    "security:audit": "npm audit --audit-level moderate",
-    "security:fix": "npm audit fix",
-    "security:check": "node scripts/security-check.js",
-    "security:scan": "node scripts/vulnerability-scan.js",
-    "lint:security": "eslint . --ext .js --config .eslintrc.security.js",
-    "test:security": "jest --testPathPattern=security"
+    "test": "jest"
   },
   "keywords": [
     "vin",
