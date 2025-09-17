@@ -8,20 +8,12 @@
     "dev": "nodemon server.js",
     "migrate": "node database/migrate.js",
     "backup": "cd database && ./backup.sh",
-    "test": "jest",
-    "seed": "node database/db-helper.js test",
-    "security:audit": "npm audit --audit-level moderate",
-    "security:fix": "npm audit fix",
-    "security:check": "node scripts/security-check.js",
-    "lint:security": "eslint . --ext .js --config .eslintrc.security.js",
-    "test:security": "jest --testPathPattern=security"
+    "test": "jest"
   },
   "keywords": [
     "vin",
     "vehicle",
-    "history",
-    "carfax",
-    "autocheck"
+    "history"
   ],
   "author": "VINaris Team",
   "license": "ISC",
@@ -35,12 +27,10 @@
     "express-rate-limit": "^6.8.1",
     "helmet": "^7.0.0",
     "html-pdf-node": "^1.0.8",
-    "isomorphic-dompurify": "^2.26.0",
     "joi": "^17.9.2",
     "jsonwebtoken": "^9.0.2",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.4",
-    "puppeteer": "^24.17.0",
     "qrcode": "^1.5.4",
     "speakeasy": "^2.0.0",
     "sqlite3": "^5.1.6",
@@ -50,8 +40,7 @@
   },
   "devDependencies": {
     "jest": "^29.6.1",
-    "nodemon": "^3.0.1",
-    "supertest": "^6.3.3"
+    "nodemon": "^3.0.1"
   },
   "engines": {
     "node": ">=16.0.0"
